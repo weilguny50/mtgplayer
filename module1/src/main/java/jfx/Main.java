@@ -22,6 +22,7 @@ public class Main extends Application {
         primaryStage.setWidth(500);
         primaryStage.show();
         mystage = primaryStage;
+        primaryStage.setFullScreenExitHint("F11 for Fullscreen  Esc to quit Fullscreen\nw-a-s-d to move arround");
     }
 
     public static void main(String[] args) {launch(args);}

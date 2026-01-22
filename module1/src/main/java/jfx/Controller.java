@@ -3,11 +3,14 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.net.URL;
@@ -18,17 +21,17 @@ import static jfx.Main.getStage;
 
 public class Controller implements Initializable {
     @FXML
-    private ImageView mtgcard;
+    public ImageView mtgcard;
     @FXML
-    Button newcardbutton;
+    public Button newcardbutton;
     @FXML
     private AnchorPane controller;
     @FXML
     public ScrollPane myscrollpane;
+    @FXML
+    public Button newcounterbutton;
 
     DraggableMaker draggableMaker = new DraggableMaker();
-
-    Stage myStage = getStage();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -39,8 +42,8 @@ public class Controller implements Initializable {
     public void newcardpress(MouseEvent e){//Ich kann auch checken, ob ich eine Taste dabei drücke wie strg shift oder alt, dafür MouseEvent anschauen mit StrgClick
             Image img = new Image(getClass().getResource("/mbm.jpg").toExternalForm());
             ImageView iv = new ImageView(img);
-            iv.setFitWidth(120);
-            iv.setFitHeight(168);
+            iv.setFitWidth(200);
+            iv.setFitHeight(280);
             iv.setPreserveRatio(true);
             iv.setLayoutX(e.getSceneX() - iv.getFitWidth() / 2);
             iv.setLayoutY(e.getSceneY() - iv.getFitHeight() / 2);
@@ -61,8 +64,21 @@ public class Controller implements Initializable {
         if(myscrollpane.getHvalue()>0.95){myscrollpane.setHvalue(1);}break;
         }
         if(e.getCode().equals(F11)){//F11 für Fullscreen
-            myStage.setFullScreen(true);//Stage ganz oben als Objekt vom Main über Methode abgespeichert.
+            Main.mystage.setFullScreen(true);//Stage ganz oben als Objekt vom Main über Methode abgespeichert.
         }}
+    public  void newcounterbuttonpress(){//Button für Statusfeld erzeugung
+        TextField txf = new TextField();//Es ist das Selbe was die Kartenbilder erzeugt.
+        txf.setPrefWidth(200);      //Einfach ein TextField wallah
+        txf.setPrefHeight(64);
+        txf.setLayoutX(1590);
+        txf.setLayoutY(1873);
+        txf.setFont(new Font("System Italic", 24));
+        controller.getChildren().add(txf);
+        draggableMaker.makeDraggable(txf);
+        txf.setId("gesetzteID");
+    }
+
+
     public void cardmousereleaseclick(){}
     public void cardclicked(MouseEvent e){}
     public void cardmouseentered(){}
