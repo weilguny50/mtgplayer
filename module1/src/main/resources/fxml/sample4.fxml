@@ -7,77 +7,77 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
-<?import javafx.scene.image.Image?>
 
-<ScrollPane fx:id="myscrollpane" onKeyPressed="#scrollkeypress" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jfx.Controller">
+<?import javafx.scene.image.Image?>
+<ScrollPane fx:id="myscrollpane" hbarPolicy="NEVER" onKeyPressed="#scrollkeypress" vbarPolicy="NEVER" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jfx.Controller">
    <content>
-      <AnchorPane fx:id="controller" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1500.0" prefWidth="1500.0">
+      <AnchorPane fx:id="controller" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="3000.0" prefWidth="3000.0">
          <children>
-            <Line endX="826.0" endY="120.5" layoutX="673.0" layoutY="879.0" startX="-174.0" startY="120.5" />
-            <Line endX="-6.5" endY="378.0" layoutX="1007.0" layoutY="624.0" startX="-6.5" startY="-122.0" />
-            <Line endX="764.5" endY="314.0" layoutX="236.0" layoutY="187.0" startX="764.5" startY="-186.0" />
-            <Line endX="449.0" endY="-578.5" layoutX="552.0" layoutY="1078.0" startX="-52.0" startY="-579.0" />
-            <Line endX="134.0" endY="-0.5" layoutX="366.0" layoutY="499.0" startX="-366.0" startY="-0.5" />
-            <Line endX="134.5" endY="242.0" layoutX="365.0" layoutY="756.0" startX="134.5" startY="-256.0" />
-            <Line endX="222.0" endY="12.5" layoutX="278.0" layoutY="986.0" startX="222.0" startY="513.0" />
-            <TextField fx:id="lifepoints1" layoutX="501.0" layoutY="934.0" prefHeight="64.0" prefWidth="124.0" text="40/21">
+            <Line endX="826.0" endY="-384.5" layoutX="2174.0" layoutY="2384.0" startX="-1173.0" startY="-384.5" />
+            <Line endX="-512.5" endY="1376.0" layoutX="2513.0" layoutY="623.0" startX="-512.0" startY="-155.5" />
+            <Line endX="259.5" endY="281.0" layoutX="1742.0" layoutY="186.0" startX="259.5" startY="-188.0" />
+            <Line endX="1447.79296875" endY="-79.5" layoutX="552.0" layoutY="1078.0" startX="449.0" startY="-79.5" />
+            <Line endX="634.5" endY="500.0" layoutX="366.0" layoutY="499.0" startX="-367.0" startY="500.0" />
+            <Line endX="330.5" endY="-257.0" layoutX="670.0" layoutY="2256.0" startX="330.5" startY="-1257.0" />
+            <Line endX="417.5" endY="-486.0" layoutX="583.0" layoutY="2486.0" startX="417.5" startY="514.0" />
+            <TextField fx:id="lifepoints1" layoutX="1876.0" layoutY="1935.0" prefHeight="64.0" prefWidth="124.0" text="40/21">
                <font>
                   <Font size="24.0" />
                </font>
             </TextField>
-            <Line endX="154.5" endY="384.0" layoutX="1224.0" layoutY="1116.0" startX="154.5" startY="-117.0" />
-            <Line endX="802.0" endY="-33.5" layoutX="698.0" layoutY="155.0" startX="302.0" startY="-33.5" />
-            <Line endX="-92.5" endY="-222.0" layoutX="213.0" layoutY="222.0" startX="-92.5" startY="277.0" />
-            <Line endX="301.5" endY="43.5" layoutX="198.0" layoutY="1336.0" startX="-198.0" startY="43.5" />
-            <Line endX="192.0" endY="60.0" layoutX="1307.0" layoutY="1248.0" startX="72.0" startY="60.0" />
-            <Line endX="154.0" endY="-145.0" layoutX="1154.0" layoutY="266.0" startX="154.0" startY="-265.0" />
-            <Line endX="-225.0" endY="17.0" layoutX="224.0" layoutY="174.0" startX="-104.0" startY="17.0" />
-            <Line endX="-58.0" endY="111.0" layoutX="250.0" layoutY="1269.0" startX="-58.0" startY="231.0" />
-            <TextField fx:id="lifepoints2" editable="false" layoutX="472.0" layoutY="529.0" prefHeight="64.0" prefWidth="124.0" rotate="90.0" text="40/21">
+            <Line endX="154.5" endY="384.0" layoutX="2725.0" layoutY="2621.0" startX="154.5" startY="-621.0" />
+            <Line endX="798.0" endY="-33.0" layoutX="2204.0" layoutY="154.0" startX="-202.0" startY="-33.0" />
+            <Line endX="-92.5" endY="-497.0" layoutX="213.0" layoutY="497.0" startX="-92.5" startY="501.5" />
+            <Line endX="497.0" endY="43.5" layoutX="503.0" layoutY="2836.0" startX="-503.0" startY="43.5" />
+            <Line endX="192.0" endY="60.0" layoutX="2808.0" layoutY="2741.0" startX="72.0" startY="60.0" />
+            <Line endX="154.0" endY="-145.0" layoutX="2649.0" layoutY="265.0" startX="154.0" startY="-265.0" />
+            <Line endX="-224.0" endY="-270.0" layoutX="224.0" layoutY="449.0" startX="-104.0" startY="-270.0" />
+            <Line endX="-58.0" endY="111.0" layoutX="239.0" layoutY="2768.0" startX="-58.0" startY="231.0" />
+            <TextField fx:id="lifepoints2" editable="false" layoutX="971.0" layoutY="1906.0" prefHeight="64.0" prefWidth="124.0" rotate="90.0" text="40/21">
                <font>
                   <Font size="24.0" />
                </font>
             </TextField>
-            <TextField fx:id="lifepoints3" editable="false" layoutX="876.0" layoutY="500.0" prefHeight="64.0" prefWidth="124.0" rotate="180.0" text="40/21">
+            <TextField fx:id="lifepoints3" editable="false" layoutX="1000.0" layoutY="998.0" prefHeight="64.0" prefWidth="124.0" rotate="180.0" text="40/21">
                <font>
                   <Font size="24.0" />
                </font>
             </TextField>
-            <TextField fx:id="lifepoints4" editable="false" layoutX="906.0" layoutY="905.0" prefHeight="64.0" prefWidth="124.0" rotate="270.0" text="40/21">
+            <TextField fx:id="lifepoints4" editable="false" layoutX="1906.0" layoutY="1028.0" prefHeight="64.0" prefWidth="124.0" rotate="270.0" text="40/21">
                <font>
                   <Font size="24.0" />
                </font>
             </TextField>
-            <ImageView fx:id="deckimage1" fitHeight="168.0" fitWidth="120.0" layoutX="1379.0" layoutY="1309.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="deckimage1" fitHeight="168.0" fitWidth="120.0" layoutX="2880.0" layoutY="2831.0" pickOnBounds="true" preserveRatio="true" />
       
-                        <ImageView fx:id="mtgcard" fitHeight="168.0" fitWidth="120.0" layoutX="719.0" layoutY="830.0" onMouseClicked="#cardclicked" onMouseEntered="#cardmouseentered" onMouseExited="#cardmouseexited" onMouseReleased="#cardmousereleaseclick" pickOnBounds="true" preserveRatio="true" >
+                        <ImageView fx:id="mtgcard" fitHeight="168.0" fitWidth="120.0" layoutX="1112.0" layoutY="1131.0" onMouseClicked="#cardclicked" onMouseEntered="#cardmouseentered" onMouseExited="#cardmouseexited" onMouseReleased="#cardmousereleaseclick" pickOnBounds="true" preserveRatio="true" >
              <Image url="/mbm.jpg"/>
          </ImageView>
 
-                        <TextField fx:id="cardsindeck1" editable="false" layoutX="1378.0" layoutY="1440.0" prefHeight="56.0" prefWidth="122.0" text="0">
+                        <TextField fx:id="cardsindeck1" editable="false" layoutX="2879.0" layoutY="2930.0" prefHeight="56.0" prefWidth="122.0" text="0">
                <font>
                   <Font size="24.0" />
                </font>
             </TextField>
-            <TextField fx:id="cardsindeck2" editable="false" layoutX="-30.0" layoutY="1411.0" prefHeight="56.0" prefWidth="122.0" rotate="90.0" text="0">
+            <TextField fx:id="cardsindeck2" editable="false" layoutX="-19.0" layoutY="2911.0" prefHeight="56.0" prefWidth="122.0" rotate="90.0" text="0">
                <font>
                   <Font size="24.0" />
                </font>
             </TextField>
-            <TextField fx:id="cardsindeck3" editable="false" layoutX="-1.0" layoutY="3.0" prefHeight="56.0" prefWidth="122.0" rotate="180.0" text="0">
+            <TextField fx:id="cardsindeck3" editable="false" layoutX="-1.0" layoutY="14.0" prefHeight="56.0" prefWidth="122.0" rotate="180.0" text="0">
                <font>
                   <Font size="24.0" />
                </font>
             </TextField>
-            <TextField fx:id="cardsindeck4" editable="false" layoutX="1407.0" layoutY="33.0" prefHeight="56.0" prefWidth="122.0" rotate="270.0" text="0">
+            <TextField fx:id="cardsindeck4" editable="false" layoutX="2897.0" layoutY="32.0" prefHeight="56.0" prefWidth="122.0" rotate="270.0" text="0">
                <font>
                   <Font size="24.0" />
                </font>
             </TextField>
-            <ImageView fx:id="deckimage2" fitHeight="168.0" fitWidth="120.0" layoutX="33.0" layoutY="1356.0" pickOnBounds="true" preserveRatio="true" rotate="90.0" />
-            <ImageView fx:id="deckimage3" fitHeight="168.0" fitWidth="120.0" layoutX="1.0" layoutY="13.0" pickOnBounds="true" preserveRatio="true" rotate="180.0" />
-            <ImageView fx:id="deckimage4" fitHeight="168.0" fitWidth="120.0" layoutX="1345.0" layoutY="-24.0" pickOnBounds="true" preserveRatio="true" rotate="270.0" />
-            <Button fx:id="newcardbutton" layoutX="598.0" layoutY="623.0" mnemonicParsing="false" onMouseClicked="#newcardpress" text="Draw">
+            <ImageView fx:id="deckimage2" fitHeight="168.0" fitWidth="120.0" layoutX="24.0" layoutY="2855.0" pickOnBounds="true" preserveRatio="true" rotate="90.0" />
+            <ImageView fx:id="deckimage3" fitHeight="168.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true" rotate="180.0" />
+            <ImageView fx:id="deckimage4" fitHeight="168.0" fitWidth="120.0" layoutX="2838.0" layoutY="-24.0" pickOnBounds="true" preserveRatio="true" rotate="270.0" />
+            <Button fx:id="newcardbutton" layoutX="1265.0" layoutY="1191.0" mnemonicParsing="false" onMouseClicked="#newcardpress" text="Draw">
                <font>
                   <Font size="11.0" />
                </font>
