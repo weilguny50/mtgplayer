@@ -12,7 +12,7 @@ import javafx.stage.Stage;
    </ImageView>
  */
 public class Main extends Application {
-
+    static Stage mystage;
     @Override
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("/fxml/sample4.fxml"));
@@ -21,8 +21,9 @@ public class Main extends Application {
         primaryStage.setHeight(500);
         primaryStage.setWidth(500);
         primaryStage.show();
-
+        mystage = primaryStage;
     }
 
     public static void main(String[] args) {launch(args);}
+    public static Stage getStage(){return mystage;}
 }

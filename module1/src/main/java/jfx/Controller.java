@@ -8,9 +8,13 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+
+import static javafx.scene.input.KeyCode.F11;
+import static jfx.Main.getStage;
 
 public class Controller implements Initializable {
     @FXML
@@ -42,17 +46,22 @@ public class Controller implements Initializable {
             draggableMaker.makeDraggable(iv);//make draggable
             iv.setId("productImage_42");//id setzen
     }
+    Stage mystage = new Stage();
     public void scrollkeypress(KeyEvent e){//Sinn: mit wasd scrollen zu können, damit man nicht immer komisch mit der Maus den Scrollbalken jagen muss
     switch(e.getText()){//KeyEvent get Text holt die gedrückte Taste, je nach Taste im H oder V Value rauf oder runter, H/V Value ist 0-1, wenns nicht ganz
-        case "w": myscrollpane.setVvalue(myscrollpane.getVvalue()-0.1);//0.1 plus oder minus rechnen kann, weil es zu nah an 0 bzw. 1 dran ist, dann wird auf
-        if(myscrollpane.getVvalue()<0.1){myscrollpane.setVvalue(0);}break;//0 bzw. 1 gesetzt
-        case "a": myscrollpane.setHvalue(myscrollpane.getHvalue()-0.1);
-        if(myscrollpane.getHvalue()<0.1){myscrollpane.setHvalue(0);}break;
-        case "s": myscrollpane.setVvalue(myscrollpane.getVvalue()+0.1);
-        if(myscrollpane.getVvalue()>0.9){myscrollpane.setVvalue(1);}break;
-        case "d": myscrollpane.setHvalue(myscrollpane.getHvalue()+0.1);
-        if(myscrollpane.getHvalue()>0.9){myscrollpane.setHvalue(1);}break;
-    }}
+        case "w": myscrollpane.setVvalue(myscrollpane.getVvalue()-0.05);//0.1 plus oder minus rechnen kann, weil es zu nah an 0 bzw. 1 dran ist, dann wird auf
+        if(myscrollpane.getVvalue()<0.05){myscrollpane.setVvalue(0);}break;//0 bzw. 1 gesetzt
+        case "a": myscrollpane.setHvalue(myscrollpane.getHvalue()-0.05);
+        if(myscrollpane.getHvalue()<0.05){myscrollpane.setHvalue(0);}break;
+        case "s": myscrollpane.setVvalue(myscrollpane.getVvalue()+0.05);
+        if(myscrollpane.getVvalue()>0.95){myscrollpane.setVvalue(1);}break;
+        case "d": myscrollpane.setHvalue(myscrollpane.getHvalue()+0.05);
+        if(myscrollpane.getHvalue()>0.95){myscrollpane.setHvalue(1);}break;
+        }
+        if(e.getCode().equals(F11)){//F11 für Fullscreen
+            Stage myStage = getStage();//Stage holen vom Main
+            myStage.setFullScreen(true);//fullscreen
+        }}
     public void cardmousereleaseclick(){}
     public void cardclicked(MouseEvent e){}
     public void cardmouseentered(){}
