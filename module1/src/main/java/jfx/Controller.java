@@ -28,6 +28,8 @@ public class Controller implements Initializable {
 
     DraggableMaker draggableMaker = new DraggableMaker();
 
+    Stage myStage = getStage();
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
@@ -46,7 +48,7 @@ public class Controller implements Initializable {
             draggableMaker.makeDraggable(iv);//make draggable
             iv.setId("productImage_42");//id setzen
     }
-    Stage mystage = new Stage();
+
     public void scrollkeypress(KeyEvent e){//Sinn: mit wasd scrollen zu können, damit man nicht immer komisch mit der Maus den Scrollbalken jagen muss
     switch(e.getText()){//KeyEvent get Text holt die gedrückte Taste, je nach Taste im H oder V Value rauf oder runter, H/V Value ist 0-1, wenns nicht ganz
         case "w": myscrollpane.setVvalue(myscrollpane.getVvalue()-0.05);//0.1 plus oder minus rechnen kann, weil es zu nah an 0 bzw. 1 dran ist, dann wird auf
@@ -59,8 +61,7 @@ public class Controller implements Initializable {
         if(myscrollpane.getHvalue()>0.95){myscrollpane.setHvalue(1);}break;
         }
         if(e.getCode().equals(F11)){//F11 für Fullscreen
-            Stage myStage = getStage();//Stage holen vom Main
-            myStage.setFullScreen(true);//fullscreen
+            myStage.setFullScreen(true);//Stage ganz oben als Objekt vom Main über Methode abgespeichert.
         }}
     public void cardmousereleaseclick(){}
     public void cardclicked(MouseEvent e){}
