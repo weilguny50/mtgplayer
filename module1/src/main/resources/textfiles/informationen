@@ -1,0 +1,100 @@
+wenn ich unsichere Änderungen machen will in IntelliJ, dann oben Git->neuer Branch
+
+db Navigator Plugin in intellij
+
+CREATE SCHEMA IF NOT EXISTS daniel;
+
+DROP SCHEMA daniel;
+
+CREATE TABLE daniel.test_entity (
+     id BIGSERIAL PRIMARY KEY,
+     name VARCHAR(200) NOT NULL,
+     aktiv BOOLEAN,
+     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE daniel.test_entity_detail (
+    id BIGSERIAL PRIMARY KEY,
+    entity_id BIGINT NOT NULL,
+    detail_name VARCHAR(200),
+    value NUMERIC,
+
+    -- Defining the 1:n relationship
+    CONSTRAINT fk_test_entity
+      FOREIGN KEY(entity_id)
+      REFERENCES daniel.test_entity(id)
+      ON DELETE CASCADE
+);
+
+INSERT INTO test_entity (name, aktiv)
+   VALUES ('Project Alpha', true);
+
+INSERT INTO test_entity (name, aktiv)
+  VALUES ('Project Beta', false);
+
+SELECT * FROM chris.test_entity;
+SELECT id, name FROM chris.test_entity;
+
+SELECT
+   id,
+   name AS benamung,
+   to_char(created_at, 'DD.MM.YYYY HH24:MI:SS') AS erstellt_am
+
+ FROM chris.test_entity;
+
+SELECT * FROM daniel.test_entity;
+    WHERE id > 2;
+
+SELECT * FROM chris.test_entity
+   WHERE id >= 1 AND name LIKE '%a%'
+   ORDER BY name DESC;
+
+   SELECT count(*) FROM daniel.test_entity;
+
+SELECT
+    aktiv,
+    COUNT(*) AS anzahl
+  FROM daniel.test_entity
+  GROUP BY aktiv;
+
+-- Two children for Project Alpha
+INSERT INTO test_entity_detail (entity_id, detail_name, value) VALUES (1, 'Alpha Task 1', 100.50);
+INSERT INTO test_entity_detail (entity_id, detail_name, value) VALUES (1, 'Alpha Task 2', 250.00);
+
+-- Two children for Project Beta
+INSERT INTO test_entity_detail (entity_id, detail_name, value) VALUES (2, 'Beta Task 1', 0.00);
+INSERT INTO test_entity_detail (entity_id, detail_name, value) VALUES (2, 'Beta Task 2', 15.75);
+
+public class TestEntityDetail {
+    private int id;
+    private String detail_name;
+    private int entity_id; // id von der anderen tabelle einfach nur mal als ID lesen.
+
+SELECT *
+FROM test_entity m
+JOIN test_entity_detail c ON m.id = c.entity_id
+ORDER BY m.name;
+
+SELECT
+    m.name AS master_name,
+    m.aktiv,
+    c.detail_name,
+    c.value
+FROM test_entity m
+JOIN test_entity_detail c ON m.id = c.entity_id
+ORDER BY m.name;
+
+SELECT
+    m.id,
+    m.name AS projekt_name,
+    COUNT(c.id) AS anzahl_details,
+    SUM(c.value) AS summe_werte,
+    ROUND(AVG(c.value), 2) AS durchschnitt_wert
+FROM chris.test_entity m
+LEFT JOIN chris.test_entity_detail c ON m.id = c.entity_id
+GROUP BY m.id, m.name;
+
+UPDATE chris.test_entity_detail
+SET value = 450.00,
+    detail_name = 'Anpassung: Alpha Task 2'
+WHERE id = 3; -- Die ID des Child-Eintrags
