@@ -1,5 +1,6 @@
 # train_2025_java_aufbau_example_project
 
+
 ## Overview
 
 This is a Java training project demonstrating software development best practices, including proper project structure, documentation, and development workflows.
