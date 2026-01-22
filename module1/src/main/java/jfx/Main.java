@@ -17,8 +17,9 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("/fxml/sample4.fxml"));
         primaryStage.setTitle("mtg player");
-
         primaryStage.setScene(new Scene(root));
+        primaryStage.setHeight(500);
+        primaryStage.setWidth(500);
         primaryStage.show();
 
     }
