@@ -31,11 +31,11 @@ public class Controller implements Initializable {
     @FXML
     public Button newcounterbutton;
 
-    DraggableMaker draggableMaker = new DraggableMaker();
+    DraggableMaker draggableMaker;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
+        draggableMaker = new DraggableMaker(myscrollpane);
         draggableMaker.makeDraggable(mtgcard);
     }
 

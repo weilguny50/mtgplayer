@@ -8,11 +8,14 @@ public class DraggableMaker {
     private double mouseAnchorX;
     private double mouseAnchorY;
     double viewOrder = 9.0;     //double 9 bis 0, niedrigerer Wert = höhere Priorität.
+    ScrollPane scrollpane;
+    public DraggableMaker(ScrollPane myscrollpane) {
+        this.scrollpane=myscrollpane;
+    }
 
     public void makeDraggable(Node node){
 
         node.setOnMousePressed(mouseEvent -> {
-            System.out.println(node.getId());
             node.setViewOrder(viewOrder=viewOrder-0.00001);//Jedes Mal, wenn auf eine Karte geklickt wird, wird von der viewOrder Variable
             mouseAnchorX = mouseEvent.getX();              // 0.00001 abgezogen, somit kann man insgesamt 999999 Mal auf eine Karte klicken bis es abschmiert.
             mouseAnchorY = mouseEvent.getY();
@@ -27,9 +30,7 @@ public class DraggableMaker {
 
         node.setOnMouseDragged(mouseEvent -> {
             if(mouseEvent.getButton() == MouseButton.PRIMARY){//check ob linke Maustaste gedrückt wurde, nur dann gehts
-            node.setLayoutX(mouseEvent.getSceneX()-mouseAnchorX);
-            node.setLayoutY(mouseEvent.getSceneY()-mouseAnchorY);
-
+                    node.relocate(mouseEvent.getX() - mouseAnchorX + node.getLayoutX(), mouseEvent.getY() - mouseAnchorY + node.getLayoutY());
             }
         });
     }
