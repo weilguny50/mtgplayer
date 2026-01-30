@@ -50,6 +50,7 @@ public class Controller implements Initializable {
             controller.getChildren().add(iv);
             draggableMaker.makeDraggable(iv);//make draggable
             iv.setId("productImage_42");//id setzen
+            iv.setManaged(false);
     }
 
     public void scrollkeypress(KeyEvent e){//Sinn: mit wasd scrollen zu können, damit man nicht immer komisch mit der Maus den Scrollbalken jagen muss
