@@ -48,8 +48,9 @@
                   <Font size="24.0" />
                </font>
             </TextField>
-            <ImageView fx:id="deckimage1" fitHeight="168.0" fitWidth="120.0" layoutX="2880.0" layoutY="2831.0" pickOnBounds="true" preserveRatio="true" />
-      
+            <ImageView fx:id="deckimage1" fitHeight="168.0" fitWidth="120.0" layoutX="2880.0" layoutY="2831.0" pickOnBounds="true" preserveRatio="true" >
+                <Image url="/backside.jpg"/>
+            </ImageView>
                         <ImageView fx:id="mtgcard" fitHeight="280.0" fitWidth="200.0" layoutX="1341.0" layoutY="2077.0" onMouseClicked="#cardclicked" onMouseEntered="#cardmouseentered" onMouseExited="#cardmouseexited" onMouseReleased="#cardmousereleaseclick" pickOnBounds="true" preserveRatio="true" >
              <Image url="/mbm.jpg"/>
          </ImageView>
@@ -74,9 +75,15 @@
                   <Font size="24.0" />
                </font>
             </TextField>
-            <ImageView fx:id="deckimage2" fitHeight="168.0" fitWidth="120.0" layoutX="24.0" layoutY="2855.0" pickOnBounds="true" preserveRatio="true" rotate="90.0" />
-            <ImageView fx:id="deckimage3" fitHeight="168.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true" rotate="180.0" />
-            <ImageView fx:id="deckimage4" fitHeight="168.0" fitWidth="120.0" layoutX="2838.0" layoutY="-24.0" pickOnBounds="true" preserveRatio="true" rotate="270.0" />
+            <ImageView fx:id="deckimage2" fitHeight="168.0" fitWidth="120.0" layoutX="24.0" layoutY="2855.0" pickOnBounds="true" preserveRatio="true" rotate="90.0" >
+             <Image url="/backside.jpg"/>
+         </ImageView>
+            <ImageView fx:id="deckimage3" fitHeight="168.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true" rotate="180.0" >
+                <Image url="/backside.jpg"/>
+            </ImageView>
+            <ImageView fx:id="deckimage4" fitHeight="168.0" fitWidth="120.0" layoutX="2838.0" layoutY="-24.0" pickOnBounds="true" preserveRatio="true" rotate="270.0" >
+                <Image url="/backside.jpg"/>
+            </ImageView>
             <Button fx:id="newcardbutton" layoutX="1696.0" layoutY="2065.0" mnemonicParsing="false" onMouseClicked="#newcardpress" text="Draw">
                <font>
                   <Font size="11.0" />

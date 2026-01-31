@@ -30,6 +30,8 @@ public class Controller implements Initializable {
     public ScrollPane myscrollpane;
     @FXML
     public Button newcounterbutton;
+    @FXML
+    public ImageView deckimage1;
 
     DraggableMaker draggableMaker;
 
@@ -51,6 +53,7 @@ public class Controller implements Initializable {
             draggableMaker.makeDraggable(iv);//make draggable
             iv.setId("productImage_42");//id setzen
             iv.setManaged(false);
+            //iv.setImage(new Image(getClass().getResource("/backside.jpg").toExternalForm())); bild ändern von karte
     }
 
     public void scrollkeypress(KeyEvent e){//Sinn: mit wasd scrollen zu können, damit man nicht immer komisch mit der Maus den Scrollbalken jagen muss
