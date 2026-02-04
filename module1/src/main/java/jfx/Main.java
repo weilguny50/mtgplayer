@@ -4,7 +4,6 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.ScrollPane;
 import javafx.stage.Stage;
 /*
 <?import javafx.scene.image.Image?>
@@ -22,9 +21,11 @@ public class Main extends Application {
         primaryStage.setWidth(500);
         primaryStage.show();
         mystage = primaryStage;
-        primaryStage.setFullScreenExitHint("F11 for Fullscreen  Esc to quit Fullscreen\nw-a-s-d to move arround");
+        primaryStage.setFullScreenExitHint("F11 for Fullscreen  Esc to quit Fullscreen\nw-a-s-d to move around");
     }
 
-    public static void main(String[] args) {launch(args);}
+    public static void main(String[] args) {
+
+        launch(args);}
     public static Stage getStage(){return mystage;}
 }
