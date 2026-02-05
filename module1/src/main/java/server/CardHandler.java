@@ -70,5 +70,9 @@ public class CardHandler {
                                 //Die richtigen Karten suchen mit unter allen Files die im ordner sind, welche haben im Namen den Setnamen UND die Nummer.
                                 //Dann muss ich, wenn ich das habe, eine uploaddecklist klasse machen beim gui, die über http, in meinem testfall localhost,
                                 //die Deckliste an den Server schickt. Mit socket und new thread und so.
+                                //die dual faced cards machen mit im karten objekt einfach zwei neue namen und nummer, und das genauso machen wie hier auch
+                                //mit shortname und fullname, chatgpt nach 2 listen fragen, eine mit vorderseite und eine mit rückseite von allen karten die
+                                //existieren, problem ist, dass ich nicht die namen da stehen haben will, sondern die set kürzel und nummer, in beiden textdokumenten
+                                //dann habe ich ein kartenobjekt, was auch ne zweite Karte gespeichert haben kann.
     }
 }
