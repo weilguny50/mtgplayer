@@ -1,5 +1,6 @@
 package server;
 
+import java.awt.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -52,22 +53,21 @@ public class CardHandler {
                 }
             }
 
-                for (int j = 0; j < Integer.valueOf(String.valueOf(cardcount)); j++) {
+                for (int j = 0; j < Integer.valueOf(String.valueOf(cardcount)); j++) {//Karten so oft hinzufügen wie sie in Deckliste vorkommen, mit cardcount Variable
                     refinedDecklist.add(newCard);
                 }
 
-            if (cardcount.length() == 1) {     //den cardcount wieder auf null setzen
+            if (cardcount.length() == 1) {     //die Cardcount Varaible wieder auf null setzen
                 cardcount.deleteCharAt(0);
             } else if (cardcount.length() == 2) {
                 cardcount.deleteCharAt(0);
                 cardcount.deleteCharAt(1);
             }
         }
-        return refinedDecklist;     //ich muss noch alles kommentieren was der code hier macht,
-                                //dieser Code returned die Decklist. als nächstes brauch ich sowas wie eine ImageDataHolder Klasse.
-                                //Die Klasse callt das hier, also nicht aus dem Main, und holt sich dann als File rein die Bilder ausm Ordner.
-                                //und behält diese Files dann in sich, um sie im UI an das Deck übergeben zu können.
-                                //Die richtigen Karten suchen mit unter allen Files die im ordner sind, welche haben im Namen den Setnamen UND die Nummer.
+
+        return new ImagePackage(refinedDecklist).createImagePackage();
+
+
                                 //Dann muss ich, wenn ich das habe, eine uploaddecklist klasse machen beim gui, die über http, in meinem testfall localhost,
                                 //die Deckliste an den Server schickt. Mit socket und new thread und so.
                                 //die dual faced cards machen mit im karten objekt einfach zwei neue namen und nummer, und das genauso machen wie hier auch
