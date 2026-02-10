@@ -6,16 +6,22 @@ import java.util.List;
 
 public class ImagePackage {
     List<CardObject> decklist;
-    List<File> deck = new ArrayList<>();
-
-    public ImagePackage(List l){
+    ArrayList<CardObject> deck = new ArrayList<>();
+    FileGetter myFileGetter = new FileGetter();
+    public ImagePackage(List<CardObject> l){
         this.decklist = l;
     }
 
-    public List createImagePackage(){
+    public ArrayList<CardObject> createImagePackage(){
 
         for (CardObject i :decklist){
-            deck.add(FileGetter.returnFile(i.getSetName(),i.getSetNumber()));
+
+            ArrayList<File> list = myFileGetter.returnFullCard(i.getSetName(), i.getSetNumber());
+            CardObject co = new CardObject();
+            co.setFrontAndBack(list.get(0), list.get(1));
+            deck.add(co);
+
+
         }
         return deck;
     }

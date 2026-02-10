@@ -1,25 +1,37 @@
 package server;
 
+
 import java.io.File;
-import java.util.stream.Stream;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FileGetter {
-static String directory = "B:/Downloads/Pictures/mtg/scryfall_cards";
-    public static File returnFile(String set,String number){
+     String directory = System.getProperty("user.dir")+"/scryfall_cards";
 
+
+    public ArrayList<File> returnFullCard(String set, String number) {
+
+        ArrayList<File> myList = new ArrayList<>(2);
+        myList.add(0,null);
+        myList.add(1,null);
         File baseDirectory = new File(directory);
 
-        for (File i : baseDirectory.listFiles()){
+        set=set.replaceAll("[\\\\/:*?\"<>|]", "_");
 
-            if(i.toString().contains(set)&&i.toString().contains(number)){
-                File y = i;
-                if(y==null){
-                    System.out.printf("Karte mit Set Namen und Nummer %s %s wurde nicht gefunden.",set,number);
-                }
-                return y;
+        String realFilename = set+" Nr."+number;
+
+        for (File i : baseDirectory.listFiles()) {
+
+            if (i.toString().contains(realFilename+"_front_")) {
+                myList.set(0,i);//front side auf slot 0
+            }
+            if (i.toString().contains(realFilename+"_back_")) {
+                myList.set(1,i);//back side auf slot 1
             }
         }
-
-        return null;
+        if(myList.isEmpty()) {
+            System.out.printf("Karte mit Set Namen und Nummer %s %s wurde nicht gefunden.", set, number);
+        }
+        return myList;
     }
 }

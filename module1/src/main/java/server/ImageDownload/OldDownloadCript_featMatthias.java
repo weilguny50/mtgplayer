@@ -28,7 +28,7 @@ import java.util.*;
  * JSoup 1.15+
  * https://jsoup.org/
  */
-public class ScryfallDownloader_JSoup_Resume {
+public class OldDownloadCript_featMatthias {
 
     private static final String BASE_URL = "https://scryfall.com/sets";
     private static final String OUTPUT_DIR = "scryfall_cards";
@@ -154,7 +154,11 @@ public class ScryfallDownloader_JSoup_Resume {
             name = name.substring(0, name.length() - 1);
         }
 
-        return name;
+        String[] split = name.split("\\(");
+        String[] split1 = split[1].split("\\)");
+
+
+        return split1[0];
     }
 
     // --------------------------------------------------
@@ -183,7 +187,7 @@ public class ScryfallDownloader_JSoup_Resume {
                         .getFileName().toString();
 
                 String sideSuffix = item.side.isBlank() ? "" : "_" + item.side;
-                String filename = item.title + sideSuffix + "_" + original;
+                String filename = item.title + sideSuffix + "_"+".jpg";
                 Path path = Paths.get(OUTPUT_DIR, filename);
 
                 if (!Files.exists(path)) {
