@@ -28,7 +28,7 @@ import java.util.*;
  * JSoup 1.15+
  * https://jsoup.org/
  */
-public class OldDownloadCript_featMatthias {
+public class OldDownloadScript_featMatthias {
 
     private static final String BASE_URL = "https://scryfall.com/sets";
     private static final String OUTPUT_DIR = "scryfall_cards";
