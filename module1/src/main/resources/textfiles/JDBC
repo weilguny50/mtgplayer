@@ -1,3 +1,5 @@
+Visual Studio Code Dark plus
+
 CREATE SCHEMA IF NOT EXISTS daniel;
 
 DROP SCHEMA daniel;

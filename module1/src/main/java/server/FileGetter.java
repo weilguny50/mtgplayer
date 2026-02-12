@@ -22,16 +22,24 @@ public class FileGetter {
 
         for (File i : baseDirectory.listFiles()) {
 
-            if (i.toString().contains(realFilename+"_front_")) {
+            String onlyFilename = removePathFromFile(i.toString());
+
+            if (onlyFilename.equals(realFilename+"_front_.jpg")) {
                 myList.set(0,i);//front side auf slot 0
+
             }
-            if (i.toString().contains(realFilename+"_back_")) {
+            if (onlyFilename.equals(realFilename+"_back_.jpg")) {
                 myList.set(1,i);//back side auf slot 1
             }
         }
-        if(myList.isEmpty()) {
-            System.out.printf("Karte mit Set Namen und Nummer %s %s wurde nicht gefunden.", set, number);
-        }
+
         return myList;
+    }
+    public static String removePathFromFile(String fname){
+        int pos = fname.lastIndexOf(File.separator);
+        if(pos > -1)
+            return fname.substring(pos + 1);
+        else
+            return fname;
     }
 }

@@ -15,7 +15,7 @@ public class CardHandler {
     List<CardObject> refinedDecklist = new ArrayList<>();
     SetTranslator t = new SetTranslator();
 
-    public List makeDecklist() {
+    public ArrayList<CardObject> makeDecklist() {
         try (InputStream is = getClass().getClassLoader().getResourceAsStream("textfiles/decklist.txt");
              InputStreamReader isr = new InputStreamReader(is, "UTF-8");
              BufferedReader br = new BufferedReader(isr)) {
