@@ -1,0 +1,93 @@
+1x All Is Dust (m3c) 152
+1x Animate Dead (mkc) 125
+1x Arcane Signet (eoc) 53
+1x Attrition (cmd) 72
+1x Black Market Connections (acr) 87
+1x Blasphemous Act (eoc) 86
+1x Blasphemous Edict (fdn) 57
+1x Blood Crypt (ecl) 262
+1x Boggart Trawler // Boggart Bog (mh3) 243
+1x Breaking of the Fellowship (ltr) 117
+1x By Force (plst) AKH-123
+1x Chaos Warp (eoc) 49
+1x Claim the Precious (ltr) 532
+1x Command Beacon (tdc) 352
+1x Command Tower (eoc) 59
+1x Counterspell (dsc) 114
+1x Cursed Mirror (mh3) 279
+1x Cyclonic Rift (rvr) 313
+1x Demolition Field (fic) 385
+1x Dimir Signet (drc) 129
+1x Disallow (drc) 74
+1x Disdainful Stroke (woe) 47
+1x Dragonskull Summit (fic) 387
+1x Dream Devourer (khm) 90
+1x Drowned Catacomb (fic) 388
+1x Dust Bowl (mmq) 316
+1x Executioner's Capsule (brc) 104
+1x Expressive Iteration (tdc) 288
+1x Feed the Swarm (tle) 257
+1x Fell the Profane // Fell Mire (mh3) 244
+1x Glen Elendra Archmage (woc) 94
+1x Gollum's Bite (ltr) 536
+1x Haunted Ridge (inr) 280
+1x Hullbreaker Horror (inr) 357
+1x Inherited Envelope (ltr) 693
+3x Island (tla) 283
+1x Lórien Revealed (ltr) 60
+1x Loxodon Warhammer (onc) 135
+1x Malakir Rebirth // Malakir Mire (znr) 111
+1x Mask of Griselbrand (dsc) 145
+1x Massacre Wurm (fdn) 714
+1x Mount Doom (ltr) 709
+3x Mountain (tla) 285
+1x Nezahal, Primal Tide (cmr) 401
+1x Nihil Spellbomb (scd) 270
+1x Oliphaunt (ltr) 590
+1x Orcish Bowmasters (ltr) 103
+1x Oubliette (plst) 2XM-100
+1x Pinnacle Monk // Mystic Peak (mh3) 246
+1x Pithing Needle (rvr) 463
+1x Poison the Cup (khm) 103
+1x Polluted Delta (mh3) 224
+1x Profane Tutor (mh2) 401
+1x Rakdos Charm (eoc) 125
+1x Rakdos Signet (dsc) 250
+1x Rampaging War Mammoth (ltc) 436
+1x Raucous Theater (mkm) 266
+1x Reanimate (fic) 282
+1x Relic of Sauron (ltc) 489
+1x Sauron, the Dark Lord (ltr) 675
+1x Saw It Coming (khm) 76
+1x Scalding Tarn (mh2) 439
+1x Shadowspear (plst) THB-236
+1x Shatterskull Smashing // Shatterskull, the Hammer Pass (znr) 161
+1x Sheoldred's Edict (one) 108
+1x Shipwreck Marsh (inr) 284
+1x Sink into Stupor // Soporific Springs (mh3) 241
+1x Sol Ring (eoc) 57
+1x Steam Vents (ecl) 267
+1x Stone of Erech (ltr) 251
+1x Stormcarved Coast (inr) 285
+1x Stubborn Denial (ktk) 56
+1x Sulfur Falls (eoc) 184
+4x Swamp (tla) 284
+1x Talisman of Creativity (tdc) 330
+1x Talisman of Dominance (fic) 364
+1x Talisman of Indulgence (fic) 366
+1x Tectonic Edge (m3c) 384
+1x The Meathook Massacre (inr) 387
+1x The One Ring (ltr) 697
+1x Thundering Falls (mkm) 269
+1x Toxic Deluge (mh3) 412
+1x Toxrill, the Corrosive (vow) 132
+1x Trinket Mage (plst) DDU-41
+1x Troll of Khazad-dûm (ltr) 562
+1x Ugin, the Spirit Dragon (m21) 1
+1x Undercity Sewers (mkm) 270
+1x Vandalblast (fic) 298
+1x Virtue of Persistence // Locthwain Scorn (woe) 115
+1x Watery Grave (eoe) 261
+1x Withering Torment (dsk) 124
+1x Worn Powerstone (mh3) 298
+1x Xander's Lounge (snc) 260

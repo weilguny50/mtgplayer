@@ -7,13 +7,16 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.net.URL;
+import java.nio.file.Files;
 import java.util.ResourceBundle;
 
 import static javafx.scene.input.KeyCode.F11;
@@ -30,6 +33,8 @@ public class Controller implements Initializable {
     public ScrollPane myscrollpane;
     @FXML
     public Button newcounterbutton;
+    @FXML
+    public ImageView deckimage1;
 
     DraggableMaker draggableMaker;
 
@@ -51,6 +56,7 @@ public class Controller implements Initializable {
             draggableMaker.makeDraggable(iv);//make draggable
             iv.setId("productImage_42");//id setzen
             iv.setManaged(false);
+            //iv.setImage(new Image(getClass().getResource("/backside.jpg").toExternalForm())); bild ändern von karte
     }
 
     public void scrollkeypress(KeyEvent e){//Sinn: mit wasd scrollen zu können, damit man nicht immer komisch mit der Maus den Scrollbalken jagen muss
@@ -79,6 +85,13 @@ public class Controller implements Initializable {
         txf.setId("gesetzteID");
     }
 
+    public void ownDeckNewCard(MouseEvent e){
+        if(e.getButton() == MouseButton.MIDDLE){//Mausrad click
+
+        //todo neue ImageView mit der getfirst Karte von der Liste erschaffen, auf dem eigenen Deck drauf.
+
+        }
+    }
 
     public void cardmousereleaseclick(){}
     public void cardclicked(MouseEvent e){}
