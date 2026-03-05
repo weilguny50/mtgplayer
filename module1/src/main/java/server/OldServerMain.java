@@ -7,11 +7,10 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
-import java.util.List;
 
 import static server.FileGetter.removePathFromFile;
 
-public class ServerMain {
+public class OldServerMain {
     static void main() {
 
         CardHandler ch = new CardHandler();

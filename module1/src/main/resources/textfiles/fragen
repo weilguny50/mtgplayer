@@ -1,5 +1,4 @@
-1: ordner verzeichnis von allen karten oder sonstige Strings/Variablen in ein Textdokument schreiben und von dort auslesen wie ganz einfach?
-
-2: automatisch von client an server verbinden, wie geht das? weil clients con anderen applikationen können sich auch einfach verbinden.
-
-3: Dokumentation
+server und client machen, client versucht connection an den server zu machen,
+server wartet auf clients, macht dann new thread mit einem client, und handshake machen, zum schaun obs funktioniert.
+client schickt die deckliste von scryfall an den server, java serialisiert, so wie chrisitan es mir auf teams geschickt hat.
+server schickt die cardobject liste and den client zurück, dazu muss der client auch die cardobject klasse haben.

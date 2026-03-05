@@ -8,6 +8,7 @@ public class CardObject {
 
     File frontFace = null;
     File backFace = null;
+
     public CardObject(String name, String number){
         name=name.trim();
         this.setName=name;

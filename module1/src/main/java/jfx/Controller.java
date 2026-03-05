@@ -1,26 +1,27 @@
 package jfx;
+import javafx.application.Platform;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.input.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Font;
-import javafx.scene.text.Text;
-import javafx.stage.Stage;
 
-import java.io.File;
+import java.awt.event.ActionEvent;
+import java.io.*;
+import java.net.Socket;
 import java.net.URL;
-import java.nio.file.Files;
 import java.util.ResourceBundle;
+import java.util.UUID;
 
 import static javafx.scene.input.KeyCode.F11;
-import static jfx.Main.getStage;
+import static jfx.ClientConnection1.mainConnection;
 
 public class Controller implements Initializable {
     @FXML
@@ -28,7 +29,7 @@ public class Controller implements Initializable {
     @FXML
     public Button newcardbutton;
     @FXML
-    private AnchorPane controller;
+    public AnchorPane controller;
     @FXML
     public ScrollPane myscrollpane;
     @FXML
@@ -36,16 +37,33 @@ public class Controller implements Initializable {
     @FXML
     public ImageView deckimage1;
 
-    DraggableMaker draggableMaker;
+    NOTINUSETapAndViewOrder tapAndViewOrder;
+
+    Socket server;
+
+    PrintWriter out;
+
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        draggableMaker = new DraggableMaker(myscrollpane);
-        draggableMaker.makeDraggable(mtgcard);
+        tapAndViewOrder = new NOTINUSETapAndViewOrder(myscrollpane);
+        tapAndViewOrder.makeDraggable(mtgcard);
+        server = mainConnection();
+        ClientRead cl = new ClientRead(server,this);
+        Thread listenFromServer = new Thread(cl,"listenForUpdatesFromServer");
+        listenFromServer.start();
+
+        try {//Hier den PrintWriter EIN MAL machen, dass nicht immer ein neuer gemacht wird.
+            out = new PrintWriter(server.getOutputStream(), true);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void newcardpress(MouseEvent e){//Ich kann auch checken, ob ich eine Taste dabei drücke wie strg shift oder alt, dafür MouseEvent anschauen mit StrgClick
-            Image img = new Image(getClass().getResource("/mbm.jpg").toExternalForm());
+            String imagePath = "/mbm.jpg";
+            Image img = new Image(getClass().getResource(imagePath).toExternalForm());
             ImageView iv = new ImageView(img);
             iv.setFitWidth(200);
             iv.setFitHeight(280);
@@ -53,10 +71,13 @@ public class Controller implements Initializable {
             iv.setLayoutX(e.getSceneX() - iv.getFitWidth() / 2);
             iv.setLayoutY(e.getSceneY() - iv.getFitHeight() / 2);
             controller.getChildren().add(iv);
-            draggableMaker.makeDraggable(iv);//make draggable
-            iv.setId("productImage_42");//id setzen
+            //tapAndViewOrder.makeDraggable(iv);//make draggable
+            iv.setId(returnNewUUID()+"§"+imagePath);//id setzen
             iv.setManaged(false);
-            //iv.setImage(new Image(getClass().getResource("/backside.jpg").toExternalForm())); bild ändern von karte
+            iv.setOnDragDetected(this::cardDragDetected);//setOnDragDetected referenziert auf die Methode carddragdetected
+            iv.setOnMousePressed(this::onMousePressed);
+            newNodeToServer(iv);
+        //iv.setImage(new Image(getClass().getResource("/backside.jpg").toExternalForm())); bild ändern von karte
     }
 
     public void scrollkeypress(KeyEvent e){//Sinn: mit wasd scrollen zu können, damit man nicht immer komisch mit der Maus den Scrollbalken jagen muss
@@ -73,6 +94,7 @@ public class Controller implements Initializable {
         if(e.getCode().equals(F11)){//F11 für Fullscreen
             Main.mystage.setFullScreen(true);//Stage ganz oben als Objekt vom Main über Methode abgespeichert.
         }}
+
     public  void newcounterbuttonpress(){//Button für Statusfeld erzeugung
         TextField txf = new TextField();//Es ist das Selbe was die Kartenbilder erzeugt.
         txf.setPrefWidth(200);      //Einfach ein TextField wallah
@@ -81,8 +103,13 @@ public class Controller implements Initializable {
         txf.setLayoutY(1873);
         txf.setFont(new Font("System Italic", 24));
         controller.getChildren().add(txf);
-        draggableMaker.makeDraggable(txf);
-        txf.setId("gesetzteID");
+        //tapAndViewOrder.makeDraggable(txf);
+        txf.setId(returnNewUUID()+"§"+":txf:");
+        txf.setPromptText("ENTER = update");
+        txf.setOnDragDetected(this::cardDragDetected);//setOnDragDetected referenziert auf die Methode carddragdetected
+        txf.setOnMousePressed(this::onMousePressed);
+        txf.setOnAction(this::hitEnterOnTextfield);
+        newNodeToServer(txf);
     }
 
     public void ownDeckNewCard(MouseEvent e){
@@ -93,8 +120,150 @@ public class Controller implements Initializable {
         }
     }
 
-    public void cardmousereleaseclick(){}
-    public void cardclicked(MouseEvent e){}
-    public void cardmouseentered(){}
-    public void cardmouseexited(){}
+    double nodeOffsetX;
+    double nodeOffsetY;
+    double viewOrder = 9.0; //double 9 bis 0, niedrigerer Wert = höhere Priorität.
+
+    public void onMousePressed(MouseEvent mouseEvent){
+
+        Node node = (Node) mouseEvent.getSource();
+        //Jedes Mal, wenn auf eine Karte geklickt wird, wird von der viewOrder Variable
+        // 0.00001 abgezogen, somit kann man insgesamt 999999 Mal auf eine Karte klicken bis es abschmiert.
+        node.setViewOrder(viewOrder = viewOrder - 0.00001);
+
+        if (mouseEvent.getButton() == MouseButton.SECONDARY) {//Auf Rechtsclick auf Karte checken
+            if (node.getRotate() == 0) {  //wenn nicht getappt ist, dann tappen,
+                node.setRotate(270);
+            } else if (node.getRotate()==270){ //wenn getappt ist, dann untappen
+                node.setRotate(0);
+            }
+            out.println(node.getId()+"~"+node.getRotate()+"~"+node.getLayoutX()+"~"+node.getLayoutY());
+
+            node.addEventFilter(ContextMenuEvent.CONTEXT_MENU_REQUESTED, Event::consume);//Contextmenü Event consumen, damit es nicht aufploppt bei Textfields
+        }
+    }
+
+    public void cardDragDetected(MouseEvent mouseEvent) {
+
+        if (mouseEvent.getButton() == MouseButton.PRIMARY) {//check ob linke Maustaste gedrückt wurde, nur dann gehts
+            Node node = (Node) mouseEvent.getSource();//Node wo draufgeklickt wird(ImagView/TextField)
+            Dragboard db = node.startDragAndDrop(TransferMode.ANY);//Dragboard speichert was man draggt, node.startdraganddrop gibt ein Dragboard Objekt zurück, das nicht eingeschränkt ist wegen Transfermode.ANY
+            ClipboardContent content = new ClipboardContent();//Clipboard ist wie Strg+C
+            content.putString("Hello!");//Hier den Inhalt des Clipboards festlegen, kann auch eine Datei oder was anderes sein.
+            db.setContent(content);//Clipboard in das Dragboard setzen
+
+            nodeOffsetX = node.getLayoutX() - mouseEvent.getScreenX();//Hier die Start-Koordinaten setzten wenn der drag detected wird.
+            nodeOffsetY = node.getLayoutY() - mouseEvent.getScreenY();
+        }
+
+    }
+
+    public void hitEnterOnTextfield(javafx.event.ActionEvent e){
+
+            TextField n = (TextField) e.getSource();
+            String content;
+            if(n.getText().isEmpty()){
+                out.println(n.getId()+"~"+" ");
+            }else{
+                out.println(n.getId()+"~"+n.getText());
+            }
+
+
+    }
+
+    public void draggedoverAnchorpane(DragEvent d){//steht jetzt in fxml beim AnchorPane
+
+        d.acceptTransferModes(TransferMode.ANY);//macht, dass der Anchorpane etwas gedropptes annehmen kann, bzw. isaccepted bei Abruf auf true setzt
+
+        Node node = (Node) d.getGestureSource();//Wieder die Node die verschoben wird bekommen
+        node.relocate(nodeOffsetX + d.getScreenX(), nodeOffsetY + d.getScreenY());//hier in der draggedover methode relocate machen, dass es die verschiebe-animation hat.
+    }
+
+    public void droppedonAnchorpane(DragEvent d) {//steht jetzt in fxml beim AnchorPane
+
+        d.setDropCompleted(true);//Sagt, dass der drop completed ist, ist nur nötig, um es von woanders abfragen zu können, obs erfolgreich ist
+        Node node = (Node) d.getGestureSource();
+        double x = node.getLayoutX();
+        double y = node.getLayoutY();
+        out.println(node.getId()+"~"+node.getRotate()+"~"+x+"~"+y);
+    }
+
+    public void newNodeToServer(Node n){
+        out.println(n.getId()+"~"+n.getRotate()+"~"+n.getLayoutX()+"~"+n.getLayoutY()+"~"+"NEW");
+    }
+
+    public void adjustNodesFromServer(String myString){
+
+        String [] data = myString.split("~");
+        Node card=null;
+        if(data.length==5){
+
+            String[] data1 = data[0].split("§");
+            Platform.runLater(() -> createNewNodeFromServer(data[0],data1[1],data[1],data[2],data[3]));//So führt man Sachen von einem anderen Thread aus.
+                    //Wenn man das Platform.runLater() nicht macht, dann schreits dass der Thread nicht der JavaFX Thread ist.
+        } else if (data.length==4) {
+
+        for (Node n:controller.getChildren()){
+            if(n.getId()!=null && n.getId().equals(data[0])){
+                card=n;
+            }
+        }
+        if (card != null) {
+            card.setRotate(Double.parseDouble(data[1]));
+            card.setLayoutX(Double.parseDouble(data[2]));
+            card.setLayoutY(Double.parseDouble(data[3]));
+        }
+        } else if (data.length == 2) {
+            TextField t;
+            for (Node n:controller.getChildren()){
+                if(n.getId()!=null && n.getId().equals(data[0])){
+                    System.out.println(data[1]);
+
+                    t = (TextField) n;
+                    if(data[1].equals(" ")){
+                        t.setText("");
+                    }else {
+                    t.setText(data[1]);
+                    }
+                }
+            }
+        }
+    }
+
+    public void createNewNodeFromServer(String fullID, String imagePath, String rotation, String x, String y){
+
+        if(imagePath.equals(":txf:")){
+            TextField txf = new TextField();
+            txf.setPrefWidth(200);
+            txf.setPrefHeight(64);
+            txf.setLayoutX(Double.parseDouble(x));
+            txf.setLayoutY(Double.parseDouble(y));
+            txf.setFont(new Font("System Italic", 24));
+            controller.getChildren().add(txf);
+            txf.setId(fullID);
+            txf.setPromptText("ENTER = update");
+            txf.setRotate(Double.parseDouble(rotation));
+            txf.setOnDragDetected(this::cardDragDetected);
+            txf.setOnMousePressed(this::onMousePressed);
+            txf.setOnAction(this::hitEnterOnTextfield);
+        } else {
+            Image img = new Image(getClass().getResource(imagePath).toExternalForm());
+            ImageView iv = new ImageView(img);
+            iv.setFitWidth(200);
+            iv.setFitHeight(280);
+            iv.setPreserveRatio(true);
+            iv.setLayoutX(Double.parseDouble(x));
+            iv.setLayoutY(Double.parseDouble(y));
+            controller.getChildren().add(iv);
+            iv.setId(fullID);
+            iv.setRotate(Double.parseDouble(rotation));
+            iv.setManaged(false);
+            iv.setOnDragDetected(this::cardDragDetected);
+            iv.setOnMousePressed(this::onMousePressed);
+        }
+    }
+
+    public String returnNewUUID(){
+        return String.valueOf(UUID.randomUUID());
+    }
 }
