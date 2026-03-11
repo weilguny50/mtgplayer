@@ -1,4 +1,4 @@
-package server;
+package jfx.makeDecklist;
 
 import java.io.*;
 import java.util.*;

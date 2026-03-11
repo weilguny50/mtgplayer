@@ -1,32 +1,23 @@
-package server;
+package jfx.makeDecklist;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 
-import static server.FileGetter.removePathFromFile;
-
-public class OldServerMain {
-    static void main() {
+public class DecklistCreator {
+        public ArrayList<CardObject> create() {
 
         CardHandler ch = new CardHandler();
 
         ArrayList<CardObject> decklist = ch.makeDecklist();
 
-        System.out.printf("mulm");
-
-        try {
+        /*try {
             temporarySaveDeck(decklist);
         } catch (IOException e) {
             throw new RuntimeException(e);
-        }
+        }*/
+        return decklist;
     }
 
-    public static void temporarySaveDeck(ArrayList<CardObject> l) throws IOException {
+    /*public static void temporarySaveDeck(ArrayList<CardObject> l) throws IOException {
         ArrayList<File> fileList = new ArrayList<>();//Diese Methoe exisitert nur, um ein Deck in den Ordner ClientCards abzuspeichern
                                                     //damit ich das herzeigen kann, und nicht 110000 Bilder auf Git laden muss.
         for (CardObject c : l) {
@@ -45,5 +36,5 @@ public class OldServerMain {
             Path copied = Paths.get("ClientCards", onlyFilename);
          Files.copy(original,copied,StandardCopyOption.REPLACE_EXISTING);//Das Files.copy ist der ärgste Mist.
         }
-    }
+    }*/
 }

@@ -12,11 +12,15 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Font;
+import jfx.httpClient.ImageClient;
+import jfx.makeDecklist.CardObject;
+import jfx.makeDecklist.DecklistCreator;
 
-import java.awt.event.ActionEvent;
 import java.io.*;
 import java.net.Socket;
 import java.net.URL;
+import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.UUID;
 
@@ -38,21 +42,24 @@ public class Controller implements Initializable {
     public ImageView deckimage1;
 
     NOTINUSETapAndViewOrder tapAndViewOrder;
-
     Socket server;
-
     PrintWriter out;
-
-
+    DecklistCreator dc;
+    ArrayList<CardObject> decklist;
+    String baseUrl = "http://localhost:8080";
+    ImageClient iclient;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        iclient = new ImageClient(baseUrl);
         tapAndViewOrder = new NOTINUSETapAndViewOrder(myscrollpane);
         tapAndViewOrder.makeDraggable(mtgcard);
         server = mainConnection();
         ClientRead cl = new ClientRead(server,this);
         Thread listenFromServer = new Thread(cl,"listenForUpdatesFromServer");
         listenFromServer.start();
+        dc = new DecklistCreator();
+        decklist = dc.create();//Deckliste machen von decklist.txt
 
         try {//Hier den PrintWriter EIN MAL machen, dass nicht immer ein neuer gemacht wird.
             out = new PrintWriter(server.getOutputStream(), true);
@@ -62,22 +69,7 @@ public class Controller implements Initializable {
     }
 
     public void newcardpress(MouseEvent e){//Ich kann auch checken, ob ich eine Taste dabei drücke wie strg shift oder alt, dafür MouseEvent anschauen mit StrgClick
-            String imagePath = "/mbm.jpg";
-            Image img = new Image(getClass().getResource(imagePath).toExternalForm());
-            ImageView iv = new ImageView(img);
-            iv.setFitWidth(200);
-            iv.setFitHeight(280);
-            iv.setPreserveRatio(true);
-            iv.setLayoutX(e.getSceneX() - iv.getFitWidth() / 2);
-            iv.setLayoutY(e.getSceneY() - iv.getFitHeight() / 2);
-            controller.getChildren().add(iv);
-            //tapAndViewOrder.makeDraggable(iv);//make draggable
-            iv.setId(returnNewUUID()+"§"+imagePath);//id setzen
-            iv.setManaged(false);
-            iv.setOnDragDetected(this::cardDragDetected);//setOnDragDetected referenziert auf die Methode carddragdetected
-            iv.setOnMousePressed(this::onMousePressed);
-            newNodeToServer(iv);
-        //iv.setImage(new Image(getClass().getResource("/backside.jpg").toExternalForm())); bild ändern von karte
+
     }
 
     public void scrollkeypress(KeyEvent e){//Sinn: mit wasd scrollen zu können, damit man nicht immer komisch mit der Maus den Scrollbalken jagen muss
@@ -112,11 +104,50 @@ public class Controller implements Initializable {
         newNodeToServer(txf);
     }
 
-    public void ownDeckNewCard(MouseEvent e){
+    Path directory = Path.of(Path.of(System.getProperty("user.dir")).getParent() + "/1ClientCards");
+    File clientFolder = new File(String.valueOf(directory));
+
+    public void createNewCard(MouseEvent e) throws FileNotFoundException {
+        CardObject c = decklist.getFirst();
+        String imagePath = c.getSetName()+" Nr."+c.getSetNumber()+"_front_.jpg";
+        File myFile=null;
+        for (File f : clientFolder.listFiles()){
+            if(f.getName().equals(imagePath)){
+                myFile = f;
+            }
+        }
+        if (myFile == null) {
+            try {
+                iclient.download(imagePath, directory);
+            } catch (IOException | InterruptedException ex) {
+                throw new RuntimeException(ex);
+            }
+        }
+            Image img = new Image(new FileInputStream(myFile));//mit Fileinputstream wenn das Bild einfach so in einem Ordner ist.
+            //Image img = new Image("file:"+myFile); mysteriös
+            ImageView iv = new ImageView(img);
+            iv.setFitWidth(200);
+            iv.setFitHeight(280);
+            iv.setPreserveRatio(true);
+            iv.setLayoutX(e.getSceneX() - iv.getFitWidth() / 2);
+            iv.setLayoutY(e.getSceneY() - iv.getFitHeight() / 2);
+            controller.getChildren().add(iv);
+            //tapAndViewOrder.makeDraggable(iv);//make draggable
+            iv.setId(returnNewUUID()+"§"+imagePath);//id setzen
+            iv.setManaged(false);
+            iv.setOnDragDetected(this::cardDragDetected);//setOnDragDetected referenziert auf die Methode carddragdetected
+            iv.setOnMousePressed(this::onMousePressed);
+            newNodeToServer(iv);
+            //iv.setImage(new Image(getClass().getResource("/backside.jpg").toExternalForm())); bild ändern von karte
+
+
+
+    }
+
+    public void ownDeckNewCard(MouseEvent e) throws FileNotFoundException {
+
         if(e.getButton() == MouseButton.MIDDLE){//Mausrad click
-
-        //todo neue ImageView mit der getfirst Karte von der Liste erschaffen, auf dem eigenen Deck drauf.
-
+            createNewCard(e);
         }
     }
 

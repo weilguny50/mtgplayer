@@ -1,4 +1,0 @@
-server und client machen, client versucht connection an den server zu machen,
-server wartet auf clients, macht dann new thread mit einem client, und handshake machen, zum schaun obs funktioniert.
-client schickt die deckliste von scryfall an den server, java serialisiert, so wie chrisitan es mir auf teams geschickt hat.
-server schickt die cardobject liste and den client zurück, dazu muss der client auch die cardobject klasse haben.

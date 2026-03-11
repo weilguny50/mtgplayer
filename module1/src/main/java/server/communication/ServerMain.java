@@ -1,5 +1,8 @@
 package server.communication;
 
+import server.httpServer.ImageServer;
+
+import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
 
@@ -9,8 +12,13 @@ public class ServerMain {
 
     static ArrayList<Socket> clients = new ArrayList<>();
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
+        int port = 8080;
+
+        ImageServer server = new ImageServer(port);
+        server.start();
+        //server.stop();
         do {
             Socket returnedClient = makeConnection();
             clients.add(returnedClient);

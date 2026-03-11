@@ -1,12 +1,13 @@
-package server;
+package jfx.makeDecklist;
 
 
 import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.List;
 
 public class FileGetter {
-     String directory = System.getProperty("user.dir")+"/scryfall_cards";
+     Path directory = Path.of(Path.of(System.getProperty("user.dir")).getParent() + "/1scryfall_cards");
 
 
     public ArrayList<File> returnFullCard(String set, String number) {
@@ -14,7 +15,7 @@ public class FileGetter {
         ArrayList<File> myList = new ArrayList<>(2);
         myList.add(0,null);
         myList.add(1,null);
-        File baseDirectory = new File(directory);
+        File baseDirectory = new File(String.valueOf(directory));
 
         set=set.replaceAll("[\\\\/:*?\"<>|]", "_");
 

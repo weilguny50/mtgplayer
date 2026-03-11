@@ -84,7 +84,7 @@
             <ImageView fx:id="deckimage4" fitHeight="168.0" fitWidth="120.0" layoutX="2838.0" layoutY="-24.0" pickOnBounds="true" preserveRatio="true" rotate="270.0">
                 <Image url="/backside.jpg" />
             </ImageView>
-            <Button fx:id="newcardbutton" layoutX="1696.0" layoutY="2065.0" mnemonicParsing="false" onMouseClicked="#newcardpress" text="Draw">
+            <Button fx:id="newcardbutton" layoutX="1696.0" layoutY="2065.0" mnemonicParsing="false" text="Draw">
                <font>
                   <Font size="11.0" />
                </font>

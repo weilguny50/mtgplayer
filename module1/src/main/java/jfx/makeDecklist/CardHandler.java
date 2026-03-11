@@ -1,6 +1,5 @@
-package server;
+package jfx.makeDecklist;
 
-import java.awt.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,7 +11,7 @@ import java.util.Map;
 public class CardHandler {
 
     List<String> decklist = new ArrayList<>();
-    List<CardObject> refinedDecklist = new ArrayList<>();
+    ArrayList<CardObject> refinedDecklist = new ArrayList<>();
     SetTranslator t = new SetTranslator();
 
     public ArrayList<CardObject> makeDecklist() {
@@ -57,22 +56,13 @@ public class CardHandler {
                     refinedDecklist.add(newCard);
                 }
 
-            if (cardcount.length() == 1) {     //die Cardcount Varaible wieder auf null setzen
+            if (cardcount.length() == 1) {     //die Cardcount Variable wieder auf null setzen
                 cardcount.deleteCharAt(0);
             } else if (cardcount.length() == 2) {
                 cardcount.deleteCharAt(0);
                 cardcount.deleteCharAt(1);
             }
         }
-
-        return new ImagePackage(refinedDecklist).createImagePackage();
-
-
-                                //Dann muss ich, wenn ich das habe, eine uploaddecklist klasse machen beim gui, die über http, in meinem testfall localhost,
-                                //die Deckliste an den Server schickt. Mit socket und new thread und so.
-                                //die dual faced cards machen mit im karten objekt einfach zwei neue namen und nummer, und das genauso machen wie hier auch
-                                //mit shortname und fullname, chatgpt nach 2 listen fragen, eine mit vorderseite und eine mit rückseite von allen karten die
-                                //existieren, problem ist, dass ich nicht die namen da stehen haben will, sondern die set kürzel und nummer, in beiden textdokumenten
-                                //dann habe ich ein kartenobjekt, was auch ne zweite Karte gespeichert haben kann.
+        return refinedDecklist;
     }
 }
