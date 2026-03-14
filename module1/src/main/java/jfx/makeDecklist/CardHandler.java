@@ -47,7 +47,7 @@ public class CardHandler {
 
             for (Map.Entry<String, String> c : setNameMap.entrySet()){
                 if(c.getKey().equalsIgnoreCase(newCard.getSetName())){
-                    newCard.setSetName(c.getValue());
+                    newCard.setSetName(c.getValue().replaceAll("[\\\\/:*?\"<>|]", "_"));
                     break;
                 }
             }

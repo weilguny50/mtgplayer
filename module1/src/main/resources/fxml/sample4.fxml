@@ -9,7 +9,7 @@
 <?import javafx.scene.text.Font?>
 
 <?import javafx.scene.image.Image?>
-<ScrollPane fx:id="myscrollpane" hbarPolicy="NEVER" onKeyPressed="#scrollkeypress" vbarPolicy="NEVER" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jfx.Controller">
+<ScrollPane fx:id="myscrollpane" hbarPolicy="NEVER" onKeyPressed="#keypressed" vbarPolicy="NEVER" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jfx.Controller">
    <content>
       <AnchorPane fx:id="controller" onDragOver="#draggedoverAnchorpane" onDragDropped="#droppedonAnchorpane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="3000.0" prefWidth="3000.0">
          <children>

@@ -1,5 +1,6 @@
 package jfx;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -15,7 +16,6 @@ import javafx.scene.text.Font;
 import jfx.httpClient.ImageClient;
 import jfx.makeDecklist.CardObject;
 import jfx.makeDecklist.DecklistCreator;
-
 import java.io.*;
 import java.net.Socket;
 import java.net.URL;
@@ -23,7 +23,6 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.UUID;
-
 import static javafx.scene.input.KeyCode.F11;
 import static jfx.ClientConnection1.mainConnection;
 
@@ -41,25 +40,24 @@ public class Controller implements Initializable {
     @FXML
     public ImageView deckimage1;
 
-    NOTINUSETapAndViewOrder tapAndViewOrder;
+
     Socket server;
     PrintWriter out;
     DecklistCreator dc;
     ArrayList<CardObject> decklist;
+    Deckhandler dh;
     String baseUrl = "http://localhost:8080";
     ImageClient iclient;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         iclient = new ImageClient(baseUrl);
-        tapAndViewOrder = new NOTINUSETapAndViewOrder(myscrollpane);
-        tapAndViewOrder.makeDraggable(mtgcard);
         server = mainConnection();
         ClientRead cl = new ClientRead(server,this);
         Thread listenFromServer = new Thread(cl,"listenForUpdatesFromServer");
         listenFromServer.start();
         dc = new DecklistCreator();
-        decklist = dc.create();//Deckliste machen von decklist.txt
+        dh = new Deckhandler(dc.create(),controller);
 
         try {//Hier den PrintWriter EIN MAL machen, dass nicht immer ein neuer gemacht wird.
             out = new PrintWriter(server.getOutputStream(), true);
@@ -68,11 +66,7 @@ public class Controller implements Initializable {
         }
     }
 
-    public void newcardpress(MouseEvent e){//Ich kann auch checken, ob ich eine Taste dabei drücke wie strg shift oder alt, dafür MouseEvent anschauen mit StrgClick
-
-    }
-
-    public void scrollkeypress(KeyEvent e){//Sinn: mit wasd scrollen zu können, damit man nicht immer komisch mit der Maus den Scrollbalken jagen muss
+    public void keypressed(KeyEvent e){//Sinn: mit wasd scrollen zu können, damit man nicht immer komisch mit der Maus den Scrollbalken jagen muss
     switch(e.getText()){//KeyEvent get Text holt die gedrückte Taste, je nach Taste im H oder V Value rauf oder runter, H/V Value ist 0-1, wenns nicht ganz
         case "w": myscrollpane.setVvalue(myscrollpane.getVvalue()-0.05);//0.1 plus oder minus rechnen kann, weil es zu nah an 0 bzw. 1 dran ist, dann wird auf
         if(myscrollpane.getVvalue()<0.05){myscrollpane.setVvalue(0);}break;//0 bzw. 1 gesetzt
@@ -81,11 +75,15 @@ public class Controller implements Initializable {
         case "s": myscrollpane.setVvalue(myscrollpane.getVvalue()+0.05);
         if(myscrollpane.getVvalue()>0.95){myscrollpane.setVvalue(1);}break;
         case "d": myscrollpane.setHvalue(myscrollpane.getHvalue()+0.05);
-        if(myscrollpane.getHvalue()>0.95){myscrollpane.setHvalue(1);}break;
-        }
+        if(myscrollpane.getHvalue()>0.95){myscrollpane.setHvalue(1);}break;}
         if(e.getCode().equals(F11)){//F11 für Fullscreen
             Main.mystage.setFullScreen(true);//Stage ganz oben als Objekt vom Main über Methode abgespeichert.
-        }}
+        }
+    }
+
+    public void openContextMenu(){
+        //todo kontext menü machen für deck und karten am feld
+    }
 
     public  void newcounterbuttonpress(){//Button für Statusfeld erzeugung
         TextField txf = new TextField();//Es ist das Selbe was die Kartenbilder erzeugt.
@@ -108,40 +106,45 @@ public class Controller implements Initializable {
     File clientFolder = new File(String.valueOf(directory));
 
     public void createNewCard(MouseEvent e) throws FileNotFoundException {
-        CardObject c = decklist.getFirst();
-        String imagePath = c.getSetName()+" Nr."+c.getSetNumber()+"_front_.jpg";
-        File myFile=null;
-        for (File f : clientFolder.listFiles()){
-            if(f.getName().equals(imagePath)){
-                myFile = f;
+        String id = dh.drawACard();
+        if(id!=null) {
+            System.out.println(id);
+            File myFile = null;
+            for (File f : clientFolder.listFiles()) {
+                if (f.getName().equals(id)) {
+                    myFile = f;
+                }
             }
-        }
-        if (myFile == null) {
-            try {
-                iclient.download(imagePath, directory);
-            } catch (IOException | InterruptedException ex) {
-                throw new RuntimeException(ex);
+            if (myFile == null) {
+                try {
+                    iclient.download(id, directory);
+                    iclient.download(id.substring(0,id.length()-11)+"_back_.jpg",directory);//Gleichzeitiger Download der möglichen Rückseite.
+                } catch (IOException | InterruptedException _) {
+                }
+                for (File f : clientFolder.listFiles()) {
+                    if (f.getName().equals(id)) {
+                        myFile = f;
+                    }
+                }
             }
-        }
             Image img = new Image(new FileInputStream(myFile));//mit Fileinputstream wenn das Bild einfach so in einem Ordner ist.
             //Image img = new Image("file:"+myFile); mysteriös
             ImageView iv = new ImageView(img);
             iv.setFitWidth(200);
             iv.setFitHeight(280);
             iv.setPreserveRatio(true);
-            iv.setLayoutX(e.getSceneX() - iv.getFitWidth() / 2);
-            iv.setLayoutY(e.getSceneY() - iv.getFitHeight() / 2);
+            iv.setLayoutX(2650);
+            iv.setLayoutY(2700);
             controller.getChildren().add(iv);
             //tapAndViewOrder.makeDraggable(iv);//make draggable
-            iv.setId(returnNewUUID()+"§"+imagePath);//id setzen
+            iv.setId(returnNewUUID() + "§" + id);//id setzen
             iv.setManaged(false);
             iv.setOnDragDetected(this::cardDragDetected);//setOnDragDetected referenziert auf die Methode carddragdetected
             iv.setOnMousePressed(this::onMousePressed);
+
             newNodeToServer(iv);
             //iv.setImage(new Image(getClass().getResource("/backside.jpg").toExternalForm())); bild ändern von karte
-
-
-
+        }
     }
 
     public void ownDeckNewCard(MouseEvent e) throws FileNotFoundException {
@@ -155,22 +158,48 @@ public class Controller implements Initializable {
     double nodeOffsetY;
     double viewOrder = 9.0; //double 9 bis 0, niedrigerer Wert = höhere Priorität.
 
-    public void onMousePressed(MouseEvent mouseEvent){
+    public void onMousePressed(MouseEvent e){
 
-        Node node = (Node) mouseEvent.getSource();
+        Node node = (Node) e.getSource();
         //Jedes Mal, wenn auf eine Karte geklickt wird, wird von der viewOrder Variable
         // 0.00001 abgezogen, somit kann man insgesamt 999999 Mal auf eine Karte klicken bis es abschmiert.
         node.setViewOrder(viewOrder = viewOrder - 0.00001);
 
-        if (mouseEvent.getButton() == MouseButton.SECONDARY) {//Auf Rechtsclick auf Karte checken
+        if (e.getButton() == MouseButton.SECONDARY) {//Auf Rechtsclick auf Karte checken
             if (node.getRotate() == 0) {  //wenn nicht getappt ist, dann tappen,
                 node.setRotate(270);
             } else if (node.getRotate()==270){ //wenn getappt ist, dann untappen
                 node.setRotate(0);
             }
             out.println(node.getId()+"~"+node.getRotate()+"~"+node.getLayoutX()+"~"+node.getLayoutY());
-
             node.addEventFilter(ContextMenuEvent.CONTEXT_MENU_REQUESTED, Event::consume);//Contextmenü Event consumen, damit es nicht aufploppt bei Textfields
+        }
+        if(e.getButton() == MouseButton.MIDDLE){
+            ImageView iv = (ImageView) e.getSource();
+            String id[] = iv.getId().split("§");
+            String newId = "";
+            File newImage = null;
+            if(id[1].contains("_back_")){
+                newId = id[1].replaceAll("_back_","_front_");
+            } else if (id[1].contains("_front_")) {
+                newId = id[1].replaceAll("_front_","_back_");
+            }
+            for (File f : clientFolder.listFiles()){
+                if(f.getName().equals(newId)){
+                    newImage=f;
+                    String fullNewId = id[0]+"§"+newId;
+                    out.println(iv.getId()+"~"+fullNewId+"~"+newId);//an server und server an clients schicken
+                    iv.setId(fullNewId);//id wieder zusammenbauen und setzen.
+                }
+            }
+            if(newImage!=null){
+                try {
+                    iv.setImage(new Image(new FileInputStream(newImage)));
+                } catch (FileNotFoundException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+
         }
     }
 
@@ -189,17 +218,14 @@ public class Controller implements Initializable {
 
     }
 
-    public void hitEnterOnTextfield(javafx.event.ActionEvent e){
+    public void hitEnterOnTextfield(ActionEvent e){
 
             TextField n = (TextField) e.getSource();
-            String content;
             if(n.getText().isEmpty()){
                 out.println(n.getId()+"~"+" ");
             }else{
                 out.println(n.getId()+"~"+n.getText());
             }
-
-
     }
 
     public void draggedoverAnchorpane(DragEvent d){//steht jetzt in fxml beim AnchorPane
@@ -223,16 +249,18 @@ public class Controller implements Initializable {
         out.println(n.getId()+"~"+n.getRotate()+"~"+n.getLayoutX()+"~"+n.getLayoutY()+"~"+"NEW");
     }
 
-    public void adjustNodesFromServer(String myString){
+    public void adjustNodesFromServer(String myString) throws FileNotFoundException {
 
         String [] data = myString.split("~");
         Node card=null;
-        if(data.length==5){
+        if(data.length==5){//Länge 5 NEUE KARTE---------------------------------------------------------------------
 
             String[] data1 = data[0].split("§");
-            Platform.runLater(() -> createNewNodeFromServer(data[0],data1[1],data[1],data[2],data[3]));//So führt man Sachen von einem anderen Thread aus.
-                    //Wenn man das Platform.runLater() nicht macht, dann schreits dass der Thread nicht der JavaFX Thread ist.
-        } else if (data.length==4) {
+            Platform.runLater(() -> {//So führt man Sachen von einem anderen Thread aus.//Wenn man das Platform.runLater() nicht macht, dann schreits dass der Thread nicht der JavaFX Thread ist.
+                try {createNewNodeFromServer(data[0],data1[1],data[1],data[2],data[3]);
+                } catch (FileNotFoundException e) {throw new RuntimeException(e);}
+            });
+        } else if (data.length==4){//Länge 4 POSITION/ROTATION ANPASSEN---------------------------------------------------------------
 
         for (Node n:controller.getChildren()){
             if(n.getId()!=null && n.getId().equals(data[0])){
@@ -244,7 +272,21 @@ public class Controller implements Initializable {
             card.setLayoutX(Double.parseDouble(data[2]));
             card.setLayoutY(Double.parseDouble(data[3]));
         }
-        } else if (data.length == 2) {
+        } else if (data.length==3){//Länge 3 FRONT/BACK ANPASSEN----------------------------------------------------------------
+            for (Node n : controller.getChildren()){
+                if(n.getId()!=null&&n.getId().equals(data[0])){
+                    File newImage = null;
+                    ImageView iv = (ImageView) n;
+                    for (File f : clientFolder.listFiles()){
+                        if(f.getName().equals(data[2])){
+                            newImage=f;
+                            iv.setId(data[1]);//id wieder zusammenbauen und setzen.
+                        }
+                    }
+                    iv.setImage(new Image(new FileInputStream(newImage)));
+                }
+            }
+        } else if (data.length == 2){//Länge 2 TEXTFELD INHALT ÄNDERN---------------------------------------------------------------
             TextField t;
             for (Node n:controller.getChildren()){
                 if(n.getId()!=null && n.getId().equals(data[0])){
@@ -261,9 +303,9 @@ public class Controller implements Initializable {
         }
     }
 
-    public void createNewNodeFromServer(String fullID, String imagePath, String rotation, String x, String y){
+    public void createNewNodeFromServer(String fullID, String id, String rotation, String x, String y) throws FileNotFoundException {
 
-        if(imagePath.equals(":txf:")){
+        if(id.equals(":txf:")){
             TextField txf = new TextField();
             txf.setPrefWidth(200);
             txf.setPrefHeight(64);
@@ -278,7 +320,25 @@ public class Controller implements Initializable {
             txf.setOnMousePressed(this::onMousePressed);
             txf.setOnAction(this::hitEnterOnTextfield);
         } else {
-            Image img = new Image(getClass().getResource(imagePath).toExternalForm());
+            File myFile=null;//wiederholter Code, ja ist schlecht aber ich kanns ja zum schluss noch polishen
+            for (File f : clientFolder.listFiles()){
+                if(f.getName().equals(id)){
+                    myFile = f;
+                }
+            }
+            if (myFile == null) {
+                try {
+                    iclient.download(id, directory);
+                    iclient.download(id.substring(0,id.length()-11)+"_back_.jpg",directory);//Gleichzeitiger Download der möglichen Rückseite.
+                } catch (IOException | InterruptedException _) {
+                }
+                for (File f : clientFolder.listFiles()) {
+                    if (f.getName().equals(id)) {
+                        myFile = f;
+                    }
+                }
+            }
+            Image img = new Image(new FileInputStream(myFile));
             ImageView iv = new ImageView(img);
             iv.setFitWidth(200);
             iv.setFitHeight(280);
