@@ -25,6 +25,7 @@ public class Deckhandler {
     }
     public String drawACard(){
         String card = library.getFirst();
+        hand.add(card);//HIER WICHTIG DIE KARTE KOMMT AUF DIE HAND
         library.removeFirst();
         return card;
     }
