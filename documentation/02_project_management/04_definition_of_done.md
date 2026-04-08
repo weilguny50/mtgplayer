@@ -1,16 +1,5 @@
-# Definition of Done
+# Definition der Fertigstellung
 
-A work item is considered done when:
+Dieses Projekt gilt als Abgeschlossen, wenn:
 
-## Functional Criteria
-- Feature implemented according to requirements
-- Acceptance criteria fulfilled
-
-## Technical Criteria
-- Code committed to Git
-- Unit tests implemented
-- Build successful
-
-## Documentation Criteria
-- Documentation updated
-- Diagrams aligned with implementation
+Client sowie Server zusammen ein Programm ergeben, dass es vier Personen ermöglicht, ein Spiel von Magic: The Gathering ohne Einschränkungen online zu simulieren.

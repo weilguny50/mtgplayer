@@ -1,11 +1,14 @@
-# Project Scope
+# Projekt Funktionalität
 
-## In Scope
-Features and functionality included in the project.
+## Features
+Import einer Deckliste von der Website Archidekt
 
-## Out of Scope
-Explicitly excluded functionality.
+Client-Server-Client Kommunikation und Datentransfer von Informationen sowie Bildern
 
-## Constraints
-Time, technology, legal, or organizational constraints.
+Live Updates aller Clients
+
+## Non-Features
+Verwendung anderer Webseiten für den Deckimport
+
+Sprachkommunikation - es muss über einen anderen Service gesprochen werden
 

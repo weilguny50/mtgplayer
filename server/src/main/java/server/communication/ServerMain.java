@@ -3,6 +3,7 @@ package server.communication;
 import server.httpServer.ImageServer;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
 
@@ -12,7 +13,7 @@ public class ServerMain {
 
     static ArrayList<Socket> clients = new ArrayList<>();
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
 
         int port = 8080;
 
@@ -24,6 +25,20 @@ public class ServerMain {
             clients.add(returnedClient);
             System.out.println("Anzahl Clients: "+clients.size());
         } while (clients.size() < 4);
+
+        try {
+            PrintWriter out1 = new PrintWriter(clients.get(0).getOutputStream(), true);
+            PrintWriter out2 = new PrintWriter(clients.get(1).getOutputStream(), true);
+            PrintWriter out3 = new PrintWriter(clients.get(2).getOutputStream(), true);
+            PrintWriter out4 = new PrintWriter(clients.get(3).getOutputStream(), true);
+
+            out1.println(1);
+            out2.println(2);
+            out3.println(3);
+            out4.println(4);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         ArrayList<Socket> listForClient1 = new ArrayList<>();//4Mal eine neue Liste machen mit nur den Clients die den jeweils betroffenen
         listForClient1.add(clients.get(1));                                                                             //Client interessieren
@@ -45,10 +60,10 @@ public class ServerMain {
         listForClient4.add(clients.get(2));
         listForClient4.add(clients.get(0));
 
-        ServerReadWrite forClient1 = new ServerReadWrite(listForClient1,clients.get(0));
-        ServerReadWrite forClient2 = new ServerReadWrite(listForClient2,clients.get(1));
-        ServerReadWrite forClient3 = new ServerReadWrite(listForClient3,clients.get(2));
-        ServerReadWrite forClient4 = new ServerReadWrite(listForClient4,clients.get(3));
+        ServerReadWrite forClient1 = new ServerReadWrite(listForClient1,clients.get(0),1);
+        ServerReadWrite forClient2 = new ServerReadWrite(listForClient2,clients.get(1),2);
+        ServerReadWrite forClient3 = new ServerReadWrite(listForClient3,clients.get(2),3);
+        ServerReadWrite forClient4 = new ServerReadWrite(listForClient4,clients.get(3),4);
 
         Thread thread1 = new Thread(forClient1,"Client1");
         Thread thread2 = new Thread(forClient2,"Client2");

@@ -1,21 +1,10 @@
-# Project Overview
+# Übersicht
 
-## Project Name
-Name of the project.
+## Projekt Name
+mtgplayer
 
-## Author(s)
-Student name(s).
-
-## Course
-Course / semester.
+## Author
+Daniel Weilguny
 
 ## Short Description
-Brief description of the project and its purpose.
-
-## Objectives
-What the project aims to achieve.
-
-## Links
-- Jira Board:
-- Git Repository:
-- (Optional) Confluence Space:
+Ein Simulator, der vier Personen ermöglicht, von verschiedenen PC's Magic: The Gathering zu spielen.

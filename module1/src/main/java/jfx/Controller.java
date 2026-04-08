@@ -21,6 +21,7 @@ import java.net.Socket;
 import java.net.URL;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.ResourceBundle;
 import java.util.UUID;
 import static javafx.scene.input.KeyCode.F11;
@@ -48,7 +49,7 @@ public class Controller implements Initializable {
     Deckhandler dh;
     String baseUrl = "http://localhost:8080";
     ImageClient iclient;
-
+    int whoAmI;
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         iclient = new ImageClient(baseUrl);
@@ -58,14 +59,35 @@ public class Controller implements Initializable {
         listenFromServer.start();
         dc = new DecklistCreator();
         dh = new Deckhandler(dc.create(),controller);
-
         try {//Hier den PrintWriter EIN MAL machen, dass nicht immer ein neuer gemacht wird.
             out = new PrintWriter(server.getOutputStream(), true);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
-
+    int left;
+    int top;
+    int right;
+    public void playerOrder(){
+        if(whoAmI==1){
+            left = 2;
+            top = 3;
+            right = 4;
+        }if(whoAmI==2){
+            left = 3;
+            top = 4;
+            right = 1;
+        }if(whoAmI==3){
+            left = 4;
+            top = 1;
+            right = 2;
+        }if(whoAmI==4){
+            left = 1;
+            top = 2;
+            right = 3;
+        }
+    }
+    int sarrs=0;
     public void keypressed(KeyEvent e){//Sinn: mit wasd scrollen zu können, damit man nicht immer komisch mit der Maus den Scrollbalken jagen muss
     switch(e.getText()){//KeyEvent get Text holt die gedrückte Taste, je nach Taste im H oder V Value rauf oder runter, H/V Value ist 0-1, wenns nicht ganz
         case "w": myscrollpane.setVvalue(myscrollpane.getVvalue()-0.05);//0.1 plus oder minus rechnen kann, weil es zu nah an 0 bzw. 1 dran ist, dann wird auf
@@ -77,7 +99,10 @@ public class Controller implements Initializable {
         case "d": myscrollpane.setHvalue(myscrollpane.getHvalue()+0.05);
         if(myscrollpane.getHvalue()>0.95){myscrollpane.setHvalue(1);}break;}
         if(e.getCode().equals(F11)){//F11 für Fullscreen
-            Main.mystage.setFullScreen(true);//Stage ganz oben als Objekt vom Main über Methode abgespeichert.
+            Main.mystage.setFullScreen(true);//Stage ganz oben als Objekt vom Main über Methode abgespeichert.//
+            }if(sarrs==0){
+            playerOrder();
+            sarrs=1;
         }
     }
 
@@ -108,7 +133,7 @@ public class Controller implements Initializable {
     public void createNewCard(MouseEvent e) throws FileNotFoundException {
         String id = dh.drawACard();
         if(id!=null) {
-            System.out.println(id);
+
             File myFile = null;
             for (File f : clientFolder.listFiles()) {
                 if (f.getName().equals(id)) {
@@ -141,7 +166,6 @@ public class Controller implements Initializable {
             iv.setManaged(false);
             iv.setOnDragDetected(this::cardDragDetected);//setOnDragDetected referenziert auf die Methode carddragdetected
             iv.setOnMousePressed(this::onMousePressed);
-
             newNodeToServer(iv);
             //iv.setImage(new Image(getClass().getResource("/backside.jpg").toExternalForm())); bild ändern von karte
         }
@@ -159,16 +183,16 @@ public class Controller implements Initializable {
     double viewOrder = 9.0; //double 9 bis 0, niedrigerer Wert = höhere Priorität.
 
     public void onMousePressed(MouseEvent e){
-
         Node node = (Node) e.getSource();
         //Jedes Mal, wenn auf eine Karte geklickt wird, wird von der viewOrder Variable
         // 0.00001 abgezogen, somit kann man insgesamt 999999 Mal auf eine Karte klicken bis es abschmiert.
         node.setViewOrder(viewOrder = viewOrder - 0.00001);
 
         if (e.getButton() == MouseButton.SECONDARY) {//Auf Rechtsclick auf Karte checken
-            if (node.getRotate() == 0) {  //wenn nicht getappt ist, dann tappen,
+
+            if (node.getRotate() == 0||node.getRotate() == 360) {  //wenn nicht getappt ist, dann tappen,
                 node.setRotate(270);
-            } else if (node.getRotate()==270){ //wenn getappt ist, dann untappen
+            } else if (node.getRotate()==270||node.getRotate()==630){ //wenn getappt ist, dann untappen
                 node.setRotate(0);
             }
             out.println(node.getId()+"~"+node.getRotate()+"~"+node.getLayoutX()+"~"+node.getLayoutY());
@@ -249,15 +273,48 @@ public class Controller implements Initializable {
         out.println(n.getId()+"~"+n.getRotate()+"~"+n.getLayoutX()+"~"+n.getLayoutY()+"~"+"NEW");
     }
 
-    public void adjustNodesFromServer(String myString) throws FileNotFoundException {
+    public void adjustNodesFromServer(String string) throws FileNotFoundException {
 
-        String [] data = myString.split("~");
+        String mulm = null;
+        String[] data = null;
+        int fromWho = 0;
+        double addRotation;
+        if(string.length() != 1){//Wenn am Anfang der Handshake und die Übergabe von welcher Client ist man, dann soll das nicht passieren.
+        String[] split = string.split("~");
+        fromWho = Integer.parseInt(split[split.length-1]);
+        ArrayList<String> withoutWho = new ArrayList<>();
+        withoutWho.addAll(Arrays.asList(split));
+        withoutWho.removeLast();//Alles ausser dem letzten. Der letzte Slot ist, von wem es kommt.
+        mulm = withoutWho.get(0);
+        for (int i = 0; i < withoutWho.size()-1; i++) {
+                mulm = mulm+"~"+withoutWho.get(i+1);
+        }
+        data = mulm.split("~");
+            if(left==fromWho){
+                addRotation=90;
+            } else if (top==fromWho) {
+                addRotation=180;
+            } else if (right==fromWho) {
+                addRotation=270;
+            } else {
+                addRotation = 0;
+            }
+        } else {
+            addRotation = 0;
+        }
+        if (string.length() == 1) {
+            data = new String[]{string};
+        }
+
         Node card=null;
         if(data.length==5){//Länge 5 NEUE KARTE---------------------------------------------------------------------
 
             String[] data1 = data[0].split("§");
+            String[] finalData = data;
+            String newCoords = correctCoordinates(finalData[2],finalData[3],fromWho);
+            String[] newCoords1 = newCoords.split("~");
             Platform.runLater(() -> {//So führt man Sachen von einem anderen Thread aus.//Wenn man das Platform.runLater() nicht macht, dann schreits dass der Thread nicht der JavaFX Thread ist.
-                try {createNewNodeFromServer(data[0],data1[1],data[1],data[2],data[3]);
+                try {createNewNodeFromServer(finalData[0],data1[1], String.valueOf(Double.parseDouble(finalData[1])+addRotation), newCoords1[0], newCoords1[1]);
                 } catch (FileNotFoundException e) {throw new RuntimeException(e);}
             });
         } else if (data.length==4){//Länge 4 POSITION/ROTATION ANPASSEN---------------------------------------------------------------
@@ -268,9 +325,11 @@ public class Controller implements Initializable {
             }
         }
         if (card != null) {
-            card.setRotate(Double.parseDouble(data[1]));
-            card.setLayoutX(Double.parseDouble(data[2]));
-            card.setLayoutY(Double.parseDouble(data[3]));
+            String newCoords = correctCoordinates(data[2],data[3],fromWho);
+            String[] newCoords1 = newCoords.split("~");
+            card.setRotate(Double.parseDouble(data[1])+addRotation);
+            card.setLayoutX(Double.parseDouble(newCoords1[0]));
+            card.setLayoutY(Double.parseDouble(newCoords1[1]));
         }
         } else if (data.length==3){//Länge 3 FRONT/BACK ANPASSEN----------------------------------------------------------------
             for (Node n : controller.getChildren()){
@@ -290,7 +349,7 @@ public class Controller implements Initializable {
             TextField t;
             for (Node n:controller.getChildren()){
                 if(n.getId()!=null && n.getId().equals(data[0])){
-                    System.out.println(data[1]);
+
 
                     t = (TextField) n;
                     if(data[1].equals(" ")){
@@ -300,7 +359,18 @@ public class Controller implements Initializable {
                     }
                 }
             }
+        } else if (data.length == 1) {
+            whoAmI = Integer.parseInt(data[0]);
         }
+    }
+
+    public String correctCoordinates(String x,String y,int fromWho){
+        double ix = Double.parseDouble(x);
+        double iy = Double.parseDouble(y);
+        if(fromWho==left) {ix-=1500;iy-=1500;iy=-iy;ix+=1500;iy+=1500;}
+        if(fromWho==top) {ix-=1500;iy-=1500;iy=-iy;ix=-ix;ix+=1500;iy+=1500;}
+        if(fromWho==right) {ix-=1500;iy-=1500;ix=-ix;ix+=1500;iy+=1500;}
+        return ix+"~"+iy;
     }
 
     public void createNewNodeFromServer(String fullID, String id, String rotation, String x, String y) throws FileNotFoundException {

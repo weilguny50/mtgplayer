@@ -11,9 +11,11 @@ public class ServerReadWrite implements Runnable{
 
     ArrayList<Socket> clientlist;
     Socket ownClient;
-    public ServerReadWrite(ArrayList<Socket> i,Socket ownClient) {
+    int fromWho;
+    public ServerReadWrite(ArrayList<Socket> i,Socket ownClient, int fromWho) {
         clientlist = i;//Constructor
         this.ownClient=ownClient;
+        this.fromWho = fromWho;
     }
 
     @Override
@@ -26,9 +28,9 @@ public class ServerReadWrite implements Runnable{
             String line;
 
             while ((line = in.readLine()) != null) {
-                out0.println(line);
-                out1.println(line);
-                out2.println(line);
+                out0.println(line+"~"+fromWho);
+                out1.println(line+"~"+fromWho);
+                out2.println(line+"~"+fromWho);
                 System.out.println(line);
             }
 
