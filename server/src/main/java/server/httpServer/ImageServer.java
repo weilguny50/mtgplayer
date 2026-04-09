@@ -30,7 +30,7 @@ public class ImageServer {
     private final HttpServer httpServer;
     private final Map<String, byte[]> imageStore = new ConcurrentHashMap<>();
 
-    Path allCardsDirectory = Path.of(System.getProperty("user.dir") + "/1scryfall_cards");
+    Path allCardsDirectory = Path.of(System.getProperty("user.dir") + "/1PrüfungsBilder");//directory wo der Server alle Bilder hat
 
     public ImageServer(int port) throws IOException {
         httpServer = HttpServer.create(new InetSocketAddress(port), 0);
