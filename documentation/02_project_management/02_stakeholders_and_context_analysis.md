@@ -1,14 +1,9 @@
-# Stakeholders and Context Analysis
+# Interressensvertretung
 
-## Stakeholders
-| Name | Role | Interest |
-|------|------|----------|
+## Personen
+Ich, als Entwickler dieser Anwendung möchte natürlich den JAVA-Kurs erfolgreich abschließen, also auch meinen Freunden ein funktionierendes "Produkt" bieten.
 
-## Business Context
-Organizational and business environment.
+## Technischer Kontext
+Programmiert mit IntelliJ unter Verwendung von JavaFX
 
-## Technical Context
-Technologies, platforms, constraints.
-
-## Risks and Assumptions
-Key risks and assumptions.
+Das Programm ist vorerst nur für Windows vorgesehen.

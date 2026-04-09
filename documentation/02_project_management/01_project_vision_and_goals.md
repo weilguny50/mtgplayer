@@ -1,13 +1,11 @@
-# Project Vision and Goals
+# Ziele
 
-## Vision
-High-level vision of the product.
 
-## Problem Statement
-What problem is being solved?
+## Problemlösung
+Es gibt, meines Wissens nach, keine Möglichkeit, GRATIS online mit seinen Freunden Magic: The Gathering zu spielen.
 
-## Goals
-List of measurable project goals.
-
-## Success Criteria
-When is the project considered successful?
+## Erfolgskriterium
+Schlussendlich soll man die Client Applikation dieses Programms an jemanden verschicken können, bzw. online heruntergeladen werden können.
+Die Server Applikation muss dann auf einem Rechner online sein, wobei die Server installation lange dauert.
+Als ersten Erfolg wird der abgabebereite Zustand der Applikation angesehen. Diese Version demonstriert vorerst das Vorhandensein eines Grundgerüsts.
+Das große Endziel der Applikation erfordert noch viele weitere Erweiterungen.
