@@ -119,7 +119,7 @@ public class Controller implements Initializable {
         txf.setFont(new Font("System Italic", 24));
         controller.getChildren().add(txf);
         //tapAndViewOrder.makeDraggable(txf);
-        txf.setId(returnNewUUID()+"§"+":txf:");
+        txf.setId(returnNewUUID()+"§"+":txf:"+"§"+whoAmI);
         txf.setPromptText("ENTER = update");
         txf.setOnDragDetected(this::cardDragDetected);//setOnDragDetected referenziert auf die Methode carddragdetected
         txf.setOnMousePressed(this::onMousePressed);
@@ -162,7 +162,7 @@ public class Controller implements Initializable {
             iv.setLayoutY(2700);
             controller.getChildren().add(iv);
             //tapAndViewOrder.makeDraggable(iv);//make draggable
-            iv.setId(returnNewUUID() + "§" + id);//id setzen
+            iv.setId(returnNewUUID() + "§" + id + "§" + whoAmI);//id setzen
             iv.setManaged(false);
             iv.setOnDragDetected(this::cardDragDetected);//setOnDragDetected referenziert auf die Methode carddragdetected
             iv.setOnMousePressed(this::onMousePressed);
@@ -187,8 +187,8 @@ public class Controller implements Initializable {
         //Jedes Mal, wenn auf eine Karte geklickt wird, wird von der viewOrder Variable
         // 0.00001 abgezogen, somit kann man insgesamt 999999 Mal auf eine Karte klicken bis es abschmiert.
         node.setViewOrder(viewOrder = viewOrder - 0.00001);
-
-        if (e.getButton() == MouseButton.SECONDARY) {//Auf Rechtsclick auf Karte checken
+        String[] isFromWho = node.getId().split("§");
+        if (e.getButton() == MouseButton.SECONDARY&&isFromWho[2].equals(String.valueOf(whoAmI))) {//Auf Rechtsclick auf Karte checken
 
             if (node.getRotate() == 0||node.getRotate() == 360) {  //wenn nicht getappt ist, dann tappen,
                 node.setRotate(270);
@@ -198,7 +198,7 @@ public class Controller implements Initializable {
             out.println(node.getId()+"~"+node.getRotate()+"~"+node.getLayoutX()+"~"+node.getLayoutY());
             node.addEventFilter(ContextMenuEvent.CONTEXT_MENU_REQUESTED, Event::consume);//Contextmenü Event consumen, damit es nicht aufploppt bei Textfields
         }
-        if(e.getButton() == MouseButton.MIDDLE){
+        if(e.getButton() == MouseButton.MIDDLE&&isFromWho[2].equals(String.valueOf(whoAmI))){
             ImageView iv = (ImageView) e.getSource();
             String id[] = iv.getId().split("§");
             String newId = "";
@@ -211,7 +211,7 @@ public class Controller implements Initializable {
             for (File f : clientFolder.listFiles()){
                 if(f.getName().equals(newId)){
                     newImage=f;
-                    String fullNewId = id[0]+"§"+newId;
+                    String fullNewId = id[0]+"§"+newId+"§"+id[2];
                     out.println(iv.getId()+"~"+fullNewId+"~"+newId);//an server und server an clients schicken
                     iv.setId(fullNewId);//id wieder zusammenbauen und setzen.
                 }
@@ -228,9 +228,10 @@ public class Controller implements Initializable {
     }
 
     public void cardDragDetected(MouseEvent mouseEvent) {
+        Node node = (Node) mouseEvent.getSource();//Node wo draufgeklickt wird(ImagView/TextField)
+        String[] isFromWho = node.getId().split("§");
+        if (mouseEvent.getButton() == MouseButton.PRIMARY&&isFromWho[2].equals(String.valueOf(whoAmI))) {//check ob linke Maustaste gedrückt wurde, nur dann gehts
 
-        if (mouseEvent.getButton() == MouseButton.PRIMARY) {//check ob linke Maustaste gedrückt wurde, nur dann gehts
-            Node node = (Node) mouseEvent.getSource();//Node wo draufgeklickt wird(ImagView/TextField)
             Dragboard db = node.startDragAndDrop(TransferMode.ANY);//Dragboard speichert was man draggt, node.startdraganddrop gibt ein Dragboard Objekt zurück, das nicht eingeschränkt ist wegen Transfermode.ANY
             ClipboardContent content = new ClipboardContent();//Clipboard ist wie Strg+C
             content.putString("Hello!");//Hier den Inhalt des Clipboards festlegen, kann auch eine Datei oder was anderes sein.
@@ -245,11 +246,14 @@ public class Controller implements Initializable {
     public void hitEnterOnTextfield(ActionEvent e){
 
             TextField n = (TextField) e.getSource();
+            Node node = (Node) e.getSource();
+            String[] isFromWho = node.getId().split("§");
+            if(isFromWho[2].equals(String.valueOf(whoAmI))){
             if(n.getText().isEmpty()){
                 out.println(n.getId()+"~"+" ");
             }else{
                 out.println(n.getId()+"~"+n.getText());
-            }
+            }}
     }
 
     public void draggedoverAnchorpane(DragEvent d){//steht jetzt in fxml beim AnchorPane
@@ -384,7 +388,8 @@ public class Controller implements Initializable {
             txf.setFont(new Font("System Italic", 24));
             controller.getChildren().add(txf);
             txf.setId(fullID);
-            txf.setPromptText("ENTER = update");
+            txf.setEditable(false);//wenn das Textfeld von jemanden anderem kommt, soll es natürlich nicht bearbeitbar sein
+            //txf.setPromptText("ENTER = update"); keinen Prompt Text für ein Textfeld, wenn einem selbst nicht gehört
             txf.setRotate(Double.parseDouble(rotation));
             txf.setOnDragDetected(this::cardDragDetected);
             txf.setOnMousePressed(this::onMousePressed);
