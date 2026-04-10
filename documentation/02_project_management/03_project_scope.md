@@ -8,7 +8,7 @@ Client-Server-Client Kommunikation und Datentransfer von Informationen sowie Bil
 Live Updates aller Clients
 
 ## Non-Features
-Verwendung anderer Webseiten für den Deckimport
+Verwendung anderer Webseiten wie Moxfield für den Deckimport
 
 Sprachkommunikation - es muss über einen anderen Service gesprochen werden
 

@@ -100,7 +100,8 @@ public class Controller implements Initializable {
         if(myscrollpane.getHvalue()>0.95){myscrollpane.setHvalue(1);}break;}
         if(e.getCode().equals(F11)){//F11 für Fullscreen
             Main.mystage.setFullScreen(true);//Stage ganz oben als Objekt vom Main über Methode abgespeichert.//
-            }if(sarrs==0){
+            }
+        if(sarrs==0){
             playerOrder();
             sarrs=1;
         }
@@ -343,7 +344,7 @@ public class Controller implements Initializable {
                     for (File f : clientFolder.listFiles()){
                         if(f.getName().equals(data[2])){
                             newImage=f;
-                            iv.setId(data[1]);//id wieder zusammenbauen und setzen.
+                            iv.setId(data[1]);//id wieder setzen.
                         }
                     }
                     iv.setImage(new Image(new FileInputStream(newImage)));

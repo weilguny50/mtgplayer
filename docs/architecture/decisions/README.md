@@ -19,7 +19,7 @@ The actual ADR documents are maintained in the `/documentation/07_decisions/` di
 
 ### Available ADRs
 
-1. [ADR 001: Architecture Decision](../../../documentation/07_decisions/adr_001_architecture_decision.md)
+1. [ADR 001: Architecture Decision](../../../documentation/07_decisions/decision.md)
    - Initial architecture approach and design patterns
 
 2. [ADR 002: Technology Selection](../../../documentation/07_decisions/adr_002_technology_selection.md)
